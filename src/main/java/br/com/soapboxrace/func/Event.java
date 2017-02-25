@@ -32,18 +32,15 @@ public class Event {
 
 	private int exp = 0, cash = 0, rank = 0;
 	private String Rewards = null;
-	private String title = null, hash = null, icon = null, type = null;
+	private String title = null, hash = null, icon = null, type = null, rspr = null;
 	private boolean leveledUp = false;
 
-	private String[] mapVisual = new String[] { "productsInCategory_NFSW_NA_EP_VISUALPARTS_LICENSEPLATES.xml",
-			"productsInCategory_NFSW_NA_EP_VISUALPARTS_NEONS.xml", "productsInCategory_NFSW_NA_EP_VISUALPARTS_WHEELS.xml",
-			"productsInCategory_STORE_VANITY_BODYKIT.xml", "productsInCategory_STORE_VANITY_HOOD.xml", "productsInCategory_STORE_VANITY_LICENSE_PLATE.xml",
-			"productsInCategory_STORE_VANITY_LOWERING_KIT.xml", "productsInCategory_STORE_VANITY_NEON.xml", "productsInCategory_STORE_VANITY_SPOILER.xml",
-			"productsInCategory_STORE_VANITY_WHEEL.xml", "productsInCategory_STORE_VANITY_WINDOW.xml" };
+	private String[] mapVisual = new String[] {"productsInCategory_STORE_VANITY_BODYKIT.xml", "productsInCategory_STORE_VANITY_HOOD.xml",
+			"productsInCategory_STORE_VANITY_LICENSE_PLATE.xml", "productsInCategory_STORE_VANITY_LOWERING_KIT.xml", "productsInCategory_STORE_VANITY_NEON.xml", "productsInCategory_STORE_VANITY_SPOILER.xml", "productsInCategory_STORE_VANITY_WHEEL.xml", "productsInCategory_STORE_VANITY_WINDOW.xml" };
 	private int[][] cashDrop = new int[][] { new int[] { 31, 69, 89, 1000, 2578, 5000, 10000, 20000, 50000, 100000, 1000000 },
 			new int[] { 31, 69, 89, 1000, 50000 } };
 
-	public void AddInventoryObject(Node objectData) {
+	public void AddInventoryObject(Node objectData, String rspr) {
 		try {
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document inventory = docBuilder.parse("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml");
@@ -61,7 +58,7 @@ public class Event {
 				case "PERFORMANCEPART": {
 					int newParts = Integer.parseInt(inventory.getElementsByTagName("PerformancePartsUsedSlotCount").item(0).getTextContent()) + 1;
 					if (newParts > Integer.parseInt(inventory.getElementsByTagName("PerformancePartsCapacity").item(0).getTextContent())) {
-						Functions.log("|| !!! -> Maximum amount of performance parts was reached. NO NEW PARTS WILL BE ADDED!");
+						Functions.log(" -->: Maximum amount of performance parts was reached. NO NEW PARTS WILL BE ADDED!");
 						return;
 					} else {
 						inventory.getElementsByTagName("PerformancePartsUsedSlotCount").item(0).setTextContent(String.valueOf(newParts));
@@ -71,7 +68,7 @@ public class Event {
 				case "SKILLMODPART": {
 					int newParts = Integer.parseInt(inventory.getElementsByTagName("SkillModPartsUsedSlotCount").item(0).getTextContent()) + 1;
 					if (newParts > Integer.parseInt(inventory.getElementsByTagName("SkillModPartsCapacity").item(0).getTextContent())) {
-						Functions.log("|| !!! -> Maximum amount of skill mods was reached. NO NEW PARTS WILL BE ADDED!");
+						Functions.log(" -->: Maximum amount of skill mods was reached. NO NEW PARTS WILL BE ADDED!");
 						return;
 					} else {
 						inventory.getElementsByTagName("SkillModPartsUsedSlotCount").item(0).setTextContent(String.valueOf(newParts));
@@ -81,7 +78,7 @@ public class Event {
 				case "VISUALPART": {
 					int newParts = Integer.parseInt(inventory.getElementsByTagName("VisualPartsUsedSlotCount").item(0).getTextContent()) + 1;
 					if (newParts > Integer.parseInt(inventory.getElementsByTagName("VisualPartsCapacity").item(0).getTextContent())) {
-						Functions.log("|| !!! -> Maximum amount of visual parts was reached. NO NEW PARTS WILL BE ADDED!");
+						Functions.log(" -->: Maximum amount of visual parts was reached. NO NEW PARTS WILL BE ADDED!");
 						return;
 					} else {
 						inventory.getElementsByTagName("VisualPartsUsedSlotCount").item(0).setTextContent(String.valueOf(newParts));
@@ -97,7 +94,7 @@ public class Event {
 								.item(inventory.getElementsByTagName("InventoryId").getLength() - 1).getTextContent()) + 1)
 						+ "</InventoryId><ProductId>DO NOT USE ME</ProductId><RemainingUseCount>1</RemainingUseCount>" + "<ResellPrice>"
 						+ String.valueOf((int) Math
-								.round(Double.parseDouble(((Element) objectData.getParentNode()).getElementsByTagName("Price").item(0).getTextContent()) / 2.0))
+								.round(Double.parseDouble(rspr) / 2.0))
 						+ ".00000</ResellPrice><Status>ACTIVE</Status>" + "<StringHash>0x" + Long.toHexString(Long.parseLong(hash)) + "</StringHash>"
 						+ "<VirtualItemType>" + type + "</VirtualItemType></InventoryItemTrans>";
 				Node fragmentNode = docBuilder.parse(new InputSource(new StringReader(child))).getDocumentElement();
@@ -127,8 +124,8 @@ public class Event {
 		doc.getElementsByTagName("DefaultOwnedCarIndex").item(0).setTextContent(String.valueOf(_carId));
 		fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
 		fx.WriteTempCar(new String(Files.readAllBytes(Paths.get("www/basket/" + basketId + ".xml")), StandardCharsets.UTF_8));
-		Functions.log("|| -> New car has been added to the carslots of persona " + Functions.personaId + ".");
-		Functions.log("|| -> Car Index has been changed to match the new car's ID.");
+		Functions.log(" -->: New car has been added to the carslots of persona " + Functions.personaId + ".");
+		Functions.log(" -->: Car Index has been changed to match the new car's ID.");
 	}
 
 	private void randCatalog() {
@@ -181,7 +178,7 @@ public class Event {
 			} else if (dropNum == 1) {
 				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/productsInCategory_NFSW_NA_EP_SKILLMODPARTS.xml");
 			} else if (dropNum == 2) {
-				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/" + mapVisual[rand.nextInt(11)]);
+				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/" + mapVisual[rand.nextInt(8)]);
 			} else if (dropNum == 3) {
 				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/productsInCategory_NFSW_NA_EP_PERFORMANCEPARTS.xml");
 				catId = rand.nextInt(catalog.getElementsByTagName("ProductTrans").getLength());
@@ -190,7 +187,8 @@ public class Event {
 				hash = catalog.getElementsByTagName("Hash").item(catId).getTextContent();
 				icon = catalog.getElementsByTagName("Icon").item(catId).getTextContent();
 				type = catalog.getElementsByTagName("ProductType").item(catId).getTextContent();
-				AddInventoryObject(catalog.getElementsByTagName("ProductTrans").item(catId));
+				rspr = catalog.getElementsByTagName("Price").item(catId).getTextContent();
+				AddInventoryObject(catalog.getElementsByTagName("ProductTrans").item(catId), rspr);
 				return;
 			}
 			catId = rand.nextInt(catalog.getElementsByTagName("ProductTrans").getLength());
@@ -199,11 +197,11 @@ public class Event {
 			icon = catalog.getElementsByTagName("Icon").item(catId).getTextContent();
 			type = catalog.getElementsByTagName("ProductType").item(catId).getTextContent();
 			if (dropNum == 0) {
-				int pAm = rand.nextInt(51);
+				int pAm = rand.nextInt(31)+4;
 				processPowerup(hash, pAm);
 				title = String.valueOf(pAm) + "x " + title.replace(" x15", "");
 			} else
-				AddInventoryObject(catalog.getElementsByTagName("ProductTrans").item(catId));
+				AddInventoryObject(catalog.getElementsByTagName("ProductTrans").item(catId), "0");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -214,12 +212,10 @@ public class Event {
 		if (RewardType == RaceReward) {
 			Functions.answerData = "<Accolades xmlns=\"http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization.Event\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><FinalRewards><Rep>"
 					+ String.valueOf(exp)
-					+ "</Rep><Tokens>" + String
-							.valueOf(
-									cash)
+					+ "</Rep><Tokens>"
+					+ String.valueOf(cash)
 					+ "</Tokens></FinalRewards><HasLeveledUp>"
-					+ String.valueOf(
-							leveledUp)
+					+ String.valueOf(leveledUp)
 					+ "</HasLeveledUp>"
 					+ (type == "BUSTED" ? "<LuckyDrawInfo/>"
 							: ("<LuckyDrawInfo><Boxes i:nil=\"true\"/><CardDeck>"
@@ -263,7 +259,7 @@ public class Event {
 
 		int curLvl = Integer.parseInt(doc2.getElementsByTagName("Level").item(0).getTextContent()) - 1;
 
-		if (curLvl < 69) {
+		if (curLvl < 99) {
 			int newRep = Integer.parseInt(doc2.getElementsByTagName("Rep").item(0).getTextContent());
 			int curLvlRep = Integer.parseInt(doc2.getElementsByTagName("RepAtCurrentLevel").item(0).getTextContent());
 			newRep = newRep + exp;
@@ -289,7 +285,7 @@ public class Event {
 						type = "PRESETCAR";
 						AddCar(catalog.getElementsByTagName("ProductId").item(catId).getTextContent());
 					}
-					if (curLvl >= 69)
+					if (curLvl >= 99)
 						break;
 					lvlExp = (Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl).getTextContent())
 							- Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl - 1).getTextContent())) - 100;
@@ -298,11 +294,11 @@ public class Event {
 			}
 
 			double percent = 0.0;
-			if (curLvl >= 69) {
+			if (curLvl >= 99) {
 				curLvlRep = 0;
-				curLvl = 69;
+				curLvl = 99;
 				percent = 0.0;
-				newRep = 15882625;
+				newRep = 57515265;
 			} else {
 				percent = Double.valueOf((double) curLvlRep / (double) lvlExp) * 100;
 			}
@@ -332,7 +328,7 @@ public class Event {
 			String newAmount = String.valueOf(Integer.parseInt(inventory.getElementsByTagName("RemainingUseCount").item(index).getTextContent()) + amount);
 			inventory.getElementsByTagName("RemainingUseCount").item(index).setTextContent(newAmount);
 			fx.WriteXML(inventory, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml");
-		} catch (SAXException | IOException | ParserConfigurationException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -355,23 +351,23 @@ public class Event {
 				icon = "BUSTED";
 				type = "BUSTED";
 			} else if (arbitrationData.equals("<TreasureHunt/>")) {
-				cash = 1000;
-				if (fx.GetLevel() == 70) {
+				cash = 1000 * fx.GetLevel();
+				if (fx.GetLevel() == 100) {
 					exp = 0;
 				} else {
-					exp = 500;
+					exp = 250 * fx.GetLevel();
 				}
 				Rewards = "<RewardPart><RepPart>" + String.valueOf(exp)
 						+ "</RepPart><RewardCategory>Rank</RewardCategory><RewardType>None</RewardType><TokenPart>" + String.valueOf(cash)
 						+ "</TokenPart></RewardPart>";
 
-				title = "500 BOOST";
+				title = "1500 BOOST";
 				hash = "";
 				icon = "128_cash";
 				type = "CASH";
 				saveAccolades();
 				if (type.equals("CASH")) {
-					Economy economy = new Economy("500", "1", true);
+					Economy economy = new Economy("1500", "1", true);
 					economy.transCurrency(false);
 				}
 				SetPrize(THReward);
@@ -382,7 +378,7 @@ public class Event {
 				cash = (int) Math.round((double) (rank == 1 ? baseReward
 						: (rank == 2 ? ((double) baseReward / 2.0) : (rank == 3 ? ((double) baseReward / 4.0) : ((double) baseReward / 20.0))))
 						* Functions.multipliers[eventType]);
-				if (fx.GetLevel() >= 70) {
+				if (fx.GetLevel() >= 100) {
 					exp = 0;
 				} else {
 					exp = (int) Math.round(
@@ -430,8 +426,8 @@ public class Event {
 									+ "</CardDeck><CurrentStreak>0</CurrentStreak><IsStreakBroken>false</IsStreakBroken><Items>" + GetPrize()
 									+ "</Items><NumBoxAnimations>100</NumBoxAnimations><NumCards>5</NumCards></LuckyDrawInfo>"))
 					+ "<OriginalRewards><Rep>0</Rep><Tokens>0</Tokens></OriginalRewards><RewardInfo>" + Rewards
-					+ "</RewardInfo></Accolades><Durability>100</Durability><EventId>384</EventId><EventSessionId>1000000000</EventSessionId><ExitPath>ExitToFreeroam</ExitPath><InviteLifetimeInMilliseconds>0</InviteLifetimeInMilliseconds><LobbyInviteId>0</LobbyInviteId><PersonaId>RELAYPERSONA</PersonaId><Heat>1</Heat></PursuitEventResult>";
-		} catch (IOException | ParserConfigurationException | SAXException e) {
+					+ "</RewardInfo></Accolades><Durability>100</Durability><EventId>384</EventId><EventSessionId>2</EventSessionId><ExitPath>ExitToFreeroam</ExitPath><InviteLifetimeInMilliseconds>0</InviteLifetimeInMilliseconds><LobbyInviteId>0</LobbyInviteId><PersonaId>RELAYPERSONA</PersonaId><Heat>1</Heat></PursuitEventResult>";
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

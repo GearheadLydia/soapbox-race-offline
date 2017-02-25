@@ -68,7 +68,7 @@ public class XmppSrv {
 		public Capitalizer(Socket socket) {
 			this.socket = socket;
 			xmppTalk = new XmppTalk(this.socket);
-			Functions.log("New connection at " + socket);
+			//Functions.log("New connection at " + socket);
 		}
 
 		public void run() {
@@ -88,7 +88,7 @@ public class XmppSrv {
 					Functions.log("Couldn't close a socket, what's going on?");
 				}
 				XmppSrv.removeXmppClient(xmppTalk.getPersonaId());
-				Functions.log("Connection with client closed");
+				//Functions.log("Connection with client closed");
 			}
 		}
 

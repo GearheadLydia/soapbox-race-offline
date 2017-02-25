@@ -1,20 +1,16 @@
 package br.com.soapboxrace.func;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
-import org.xml.sax.SAXException;
 
 public class Basket {
 
@@ -24,8 +20,8 @@ public class Basket {
 		try {
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			String basketId = fx.parseBasketId(basketTrans);
-			Functions.log("|| Basket action detected.");
-			Functions.log("  || Initializing economy module.");
+			Functions.log(" -->: Basket action detected.");
+			Functions.log(" -->: Initializing economy module.");
 			Economy economy = new Economy(mapBasketId(basketId), basketId, false);
 			if (mapBasketId(basketId) == null)
 				return;
@@ -34,69 +30,72 @@ public class Basket {
 					Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml"));
 					doc.getElementsByTagName("OwnedCarSlotsCount").item(0)
 							.setTextContent(String.valueOf(Integer.parseInt(doc.getElementsByTagName("OwnedCarSlotsCount").item(0).getTextContent()) + 1));
-
 					fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
-
-					Functions.log("|| -> Carslot amount increased. [+1]");
+					Functions.log(" -->: Carslot amount increased. [+1]");
 				} else if (basketId.contains("SRV-REPAIR")) {
 					Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml"));
 					doc.getElementsByTagName("Durability").item(Integer.parseInt(fx.ReadCarIndex())).setTextContent("100");
-
 					fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
-
-					Functions.log("|| -> The car has been repaired.");
+					Functions.log(" -->: The car has been repaired.");
 				} else if (basketId.contains("SRV-POWERUP")) {
 					int index = Integer.parseInt(basketId.replace("SRV-POWERUP", ""));
 					Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml"));
 					String newAmount = String.valueOf(Integer.parseInt(doc.getElementsByTagName("RemainingUseCount").item(index).getTextContent()) + 15);
 					doc.getElementsByTagName("RemainingUseCount").item(index).setTextContent(newAmount);
-
 					fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml");
 				} else if (basketId.contains("SRV-THREVIVE")) {
 					Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/events/gettreasurehunteventsession.xml"));
 					doc.getElementsByTagName("IsStreakBroken").item(0).setTextContent("false");
-
 					fx.WriteXML(doc, "www/soapbox/Engine.svc/events/gettreasurehunteventsession.xml");
 				} else {
 					if (Files.exists(Paths.get("www/basket/" + basketId + ".xml"))) {
-						Functions.log("|| -> Purchase for car " + basketId + " was successful.");
+						Functions.log(" -->: Purchase for car " + basketId + " was successful.");
 						fx.FixCarslots();
+
+						Document docShop = docBuilder.parse(new File("www/soapbox/Engine.svc/catalog/productsInCategory_NFSW_NA_EP_PRESET_RIDES_ALL_Category.xml"));
+						int basketIdVal = Integer.parseInt(basketId.replaceAll("SRV-CAR", ""));
+						int price = Integer.parseInt(docShop.getElementsByTagName("Price").item(basketIdVal).getTextContent());
+						Functions.log(" -->: New Car was bought for " + price + " IGC.");
+						String resellPrice = String.valueOf(price / 2);
 						Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml"));
 						int lastIdIndex = doc.getElementsByTagName("Id").getLength() - 1;
-						String carId = String.valueOf(Integer.parseInt(doc.getElementsByTagName("Id").item(lastIdIndex).getTextContent()) + 1);
-
+						String carId = "1";
+						if (lastIdIndex <= 0) {
+							lastIdIndex = 0;
+							carId = "1";
+						}
+						else {
+							carId = String.valueOf(Integer.parseInt(doc.getElementsByTagName("Id").item(lastIdIndex).getTextContent()) + 1);
+						}
 						Document doc2 = docBuilder.parse(new File("www/basket/" + basketId + ".xml"));
 						doc2.getElementsByTagName("Id").item(1).setTextContent(carId);
+						doc2.getElementsByTagName("ResalePrice").item(0).setTextContent(resellPrice);
 						Node carTrans = doc.importNode(doc2.getFirstChild(), true);
 						doc.getElementsByTagName("CarsOwnedByPersona").item(0).appendChild(carTrans);
-						Functions.log("|| -> New car has been appended to carslots.");
+						Functions.log(" -->: New car has been appended to carslots.");
 						int _carId = Integer.parseInt(carId) - 1;
 						doc.getElementsByTagName("DefaultOwnedCarIndex").item(0).setTextContent(String.valueOf(_carId));
-						Functions.log("|| -> CarIndex has been set to match new car's index.");
+						Functions.log(" -->: CarIndex has been set to match new car's index.");
 						fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
 						fx.WriteTempCar(new String(Files.readAllBytes(Paths.get("www/basket/" + basketId + ".xml")), StandardCharsets.UTF_8));
-						Functions.log("|| -> The car [ID = " + carId + "; Index = " + _carId + "] has been bought and set.");
+						Functions.log(" -->: The car [ID = " + carId + "; Index = " + _carId + "] has been bought and set.");
 					} else {
-						Functions.log("|| !!!! -> Basket not found: " + basketId);
+						Functions.log(" -->: Basket not found: " + basketId);
 					}
 				}
 			} else {
 				Functions.answerData = "";
-				Functions.log("  || !! -> You do not have enough currency!");
+				Functions.log(" -->: You do not have enough currency!");
 			}
-		} catch (ParserConfigurationException pce) {
-			pce.printStackTrace();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} catch (SAXException sae) {
-			sae.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void SellCar(String serialNumber) {
 		if (serialNumber != null) {
 			try {
-				Functions.log("|| Sell Car action detected.");
+				Functions.log(" -->: Sell Car action detected.");
 
 				int carId = fx
 						.CountInstances(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml")),
@@ -106,19 +105,19 @@ public class Basket {
 						.CountInstances(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml")),
 								StandardCharsets.UTF_8), "<OwnedCarTrans>", "</CarsOwnedByPersona>");
 				if (carAm > 1) {
-					Functions.log("|| -> More than 1 car is found, can proceed.");
+					Functions.log(" -->: More than 1 car is found, can proceed.");
 					Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 							.parse("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
 					doc.getElementsByTagName("DefaultOwnedCarIndex").item(0).setTextContent("0");
 
-					Functions.log("  || Initializing economy module.");
+					Functions.log(" -->: Initializing economy module.");
 					Economy economy = new Economy(doc.getElementsByTagName("ResalePrice").item(carId).getTextContent(), "0", true);
-					Functions.log("  || -> " + doc.getElementsByTagName("ResalePrice").item(carId).getTextContent() + "IGC to be added to your balance.");
+					Functions.log(" -->: " + doc.getElementsByTagName("ResalePrice").item(carId).getTextContent() + "IGC to be added to your balance.");
 					economy.transCurrency(false);
 
 					Node carToSell = doc.getElementsByTagName("OwnedCarTrans").item(carId);
 					doc.getElementsByTagName("CarsOwnedByPersona").item(0).removeChild(carToSell);
-					Functions.log("|| -> The car has been removed from carslots.");
+					Functions.log(" -->: The car has been removed from carslots.");
 
 					Node OwnedCar = doc.getElementsByTagName("OwnedCarTrans").item(0);
 					DOMImplementationLS lsImpl = (DOMImplementationLS) OwnedCar.getOwnerDocument().getImplementation().getFeature("LS", "3.0");
@@ -127,17 +126,12 @@ public class Basket {
 					String StringOwnedCar = serializer.writeToString(OwnedCar);
 					fx.WriteTempCar(StringOwnedCar);
 					fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
-
-					Functions.log("|| The car [ID = " + serialNumber + "; Index = " + carId + "] has been sold.");
+					Functions.log(" -->: The car [ID = " + serialNumber + "; Index = " + carId + "] has been sold.");
 				} else {
-					Functions.log("|| The car [ID = " + serialNumber + "; Index = 0] is the last car, can't be sold.");
+					Functions.log(" -->: The car [ID = " + serialNumber + "; Index = 0] is the last car, can't be sold.");
 				}
-			} catch (ParserConfigurationException pce) {
-				pce.printStackTrace();
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			} catch (SAXException sae) {
-				sae.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}
