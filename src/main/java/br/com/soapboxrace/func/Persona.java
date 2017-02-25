@@ -15,8 +15,6 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 public class Persona {
-//show me browser at github in your account firefox, chrome show hidden files?
-	
 	
 	private Functions fx = new Functions();
 
