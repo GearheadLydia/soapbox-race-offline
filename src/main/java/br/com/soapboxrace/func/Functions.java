@@ -31,6 +31,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import br.com.soapboxrace.srv.HttpSrv;
+import br.com.soapboxrace.xmpp.XmppSrv;
 
 public class Functions {
 	private static Random rand = new Random();
@@ -87,13 +88,13 @@ public class Functions {
 				while (forward) {
 					spam += "=";
 					Thread.sleep(50);
-					Constants.sendChat(spam);
+					sendChat(spam);
 					if (spam.length() == maxlength) forward = false;
 				}
 				while (!forward) {
 					spam = spam.substring(0, spam.length()-1);
 					Thread.sleep(50);
-					Constants.sendChat(spam);
+					sendChat(spam);
 					if (spam.length() == 1) forward = true;
 				}
 			}
@@ -279,6 +280,14 @@ public class Functions {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static void sendChat(String messageText) {
+		String chat = "<message from='nfsw.engine.engine@127.0.0.1/EA_Chat' id='JN_0' to='nfsw.RELAYPERSONA@127.0.0.1'><body>&lt;response status='1' ticket='0'&gt;&lt;ChatBroadcast&gt;&lt;ChatBlob&gt;&lt;FromName&gt;System&lt;/FromName&gt;&lt;FromPersonaId&gt;0&lt;/FromPersonaId&gt;&lt;FromUserId&gt;0&lt;/FromUserId&gt;&lt;Message&gt;" + messageText + "&lt;/Message&gt;&lt;ToId&gt;0&lt;/ToId&gt;&lt;Type&gt;2&lt;/Type&gt;&lt;/ChatBlob&gt;&lt;/ChatBroadcast&gt;&lt;/response&gt;</body><subject>LOLnope.</subject></message>";
+		String msg = new String(chat).replace("RELAYPERSONA", Functions.personaId);
+		Long personaIdLong = Long.decode(Functions.personaId);
+		XmppSrv.sendMsg(personaIdLong, msg);
+		return;
 	}
 
 	public int GetLevel() throws ParserConfigurationException, SAXException, IOException {

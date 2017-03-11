@@ -14,6 +14,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ import br.com.soapboxrace.func.Matchmaking;
 import br.com.soapboxrace.func.Persona;
 import br.com.soapboxrace.func.Functions;
 import br.com.soapboxrace.swing.MainWindow;
+import br.com.soapboxrace.xmpp.XmppLobbyThread;
 //import br.com.soapboxrace.xmpp.SubjectCalc;
 import br.com.soapboxrace.xmpp.XmppSrv;
 
@@ -46,12 +49,14 @@ public class HttpSrv extends GzipHandler {
 	public static String modifiedTarget;
 //	public static boolean THBroken = false;
 	public static int iEvent = 0;
+	private String eventIdTmp;
 	private int[] randEventIds = { 88, 89, 91, 93, 96, 99, 100, 101, 105, 106, 107, 111, 114, 115, 118, 119, 121, 122, 123, 125, 126, 129, 130, 132, 136, 138, 139, 140, 142, 143, 150, 152, 153, 154, 160, 162, 163, 164, 167, 168, 170, 171, 172, 174, 177, 178, 180, 181, 182, 184, 186, 187, 189, 190, 192, 193, 199, 201, 203, 204, 206, 207, 208, 213, 223, 224, 225, 226, 227, 228, 235, 271, 272, 273, 274, 275, 276, 291, 297, 300, 304, 306, 310, 311, 312, 313, 338, 339, 340, 344, 347, 348, 353 };
 
 	@Override
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String sLastTarget = target.split("/")[target.split("/").length - 1];
+			System.out.println(baseRequest);
 			if (!target.contains("broad") && !target.contains("heart") && !target.contains("powerup") && !target.contains("queue") && !target.contains("catalog") && !target.contains("Gifts") && !target.contains("hunt") && !target.contains("ersona") && !target.contains("event") && !target.contains(".jpg")) {
 				if ("POST".equals(baseRequest.getMethod())) {
 					Functions.log(baseRequest.getMethod() + ": ----------------------------------------------------------------> " + target.replaceAll("/soapbox/Engine.svc/", ""));
@@ -75,9 +80,9 @@ public class HttpSrv extends GzipHandler {
 			} else if (sLastTarget.equals("NewsArticles")){
 				modifiedTarget = "x"; Functions.answerData = "<ArrayOfNewsArticleTrans/>";
 				Thread.sleep(500);
-				Constants.sendChat(Constants.WelcomeMessage);
+				Functions.sendChat(Constants.WelcomeMessage);
 				iEvent = randEventIds[new Random().nextInt(randEventIds.length)];
-				Constants.sendChat("New Random-Event generated. ID: " + iEvent);
+				Functions.sendChat("New Random-Event generated. ID: " + iEvent);
 				Functions.log(" -->: New Random-Event generated / ID: " + iEvent);
 			} else if (sLastTarget.equals("client")){
 				modifiedTarget = "x"; Functions.answerData = Constants.ClientLog;
@@ -113,7 +118,7 @@ public class HttpSrv extends GzipHandler {
 				modifiedTarget = "x"; Functions.answerData = Constants.EventsAvailable;
 			} else if (sLastTarget.equals("joinqueueracenow")) {
 				iEvent = randEventIds[new Random().nextInt(randEventIds.length)];
-				Constants.sendChat("New Random-Event generated. ID: " + iEvent);
+				Functions.sendChat("New Random-Event generated. ID: " + iEvent);
 				Functions.log(" -->: New Random-Event generated / ID: " + iEvent);
 
 
@@ -162,7 +167,15 @@ public class HttpSrv extends GzipHandler {
 			} else if (target.matches("/soapbox/Engine.svc/DriverPersona/GetPersonaInfo")) {
 				modifiedTarget = "/soapbox/Engine.svc/personas/" + Functions.personaId + "/GetPersonaInfo";
 			} else if (target.matches("/soapbox/Engine.svc/DriverPersona/GetPersonaBaseFromList")) {
-				modifiedTarget = "/soapbox/Engine.svc/personas/" + Functions.personaId + "/GetPersonaBaseFromList";
+				String readInputStream = readInputStream(request);
+				String pattern = "(.*)<array:long>(.*)</array:long>(.*)";
+				Pattern r = Pattern.compile(pattern);
+				Matcher m = r.matcher(readInputStream);
+				String personaId = Functions.personaId ;
+				if(m.find()){
+					personaId = m.group(2);
+				}
+				modifiedTarget = "/soapbox/Engine.svc/personas/" + personaId + "/GetPersonaBaseFromList";
 			} else if (target.matches("/soapbox/Engine.svc/events/gettreasurehunteventsession")) {
 				modifiedTarget = "/soapbox/Engine.svc/personas/gettreasurehunteventsession";
 			} else if (target.matches("/soapbox/Engine.svc/personas/inventory/objects")) {
@@ -187,6 +200,16 @@ public class HttpSrv extends GzipHandler {
 				}
 			} else if (target.matches("/soapbox/Engine.svc/events/accolades")) {
 				event.ReadArbitration("<TreasureHunt/>"); modifiedTarget = "THCompleted";
+			} else if(target.matches("/soapbox/Engine.svc/matchmaking/joinqueueevent/(.*)")){
+				String[] split = target.split("/");
+				eventIdTmp = split[5];
+				XmppSrv.sendMsg(Long.valueOf(Functions.personaId), Constants.joinEvent(Functions.personaId, split[5]));
+			} else if (target.matches("/soapbox/Engine.svc/matchmaking/acceptinvite(.*)")) {
+				modifiedTarget = "x"; Functions.answerData = Constants.acceptInvite(Functions.personaId, eventIdTmp);
+				new XmppLobbyThread(Functions.personaId, eventIdTmp).start();
+			} else if(target.matches("/soapbox/Engine.svc/crypto/relaycryptoticket/(.*)")){
+				modifiedTarget = "x"; Functions.answerData = Constants.relayCriptoTicket();
+				System.out.println(Constants.relayCriptoTicket());
 			}
 
 			if (target.contains(".jpg")) {response.setContentType("image/jpeg");} else {response.setContentType("application/xml;charset=utf-8");}

@@ -273,7 +273,7 @@ public class Event {
 				while (_leveledUp) {
 					curLvlRep = curLvlRep - lvlExp;
 					curLvl = curLvl + 1;
-					Constants.sendChat("Congratulations, you reached level "+ Integer.valueOf(curLvl+1) +"!");
+					Functions.sendChat("Congratulations, you reached level "+ Integer.valueOf(curLvl+1) +"!");
 
 					if (curLvl % 10 == 9) {
 						Document catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_PRESET_RIDES_ALL_Category.xml");
@@ -283,7 +283,7 @@ public class Event {
 						icon = catalog.getElementsByTagName("Icon").item(catId).getTextContent();
 						type = "PRESETCAR";
 						AddCar(catalog.getElementsByTagName("ProductId").item(catId).getTextContent());
-						Constants.sendChat("You won a free Car + Carslot!");
+						Functions.sendChat("You won a free Car + Carslot!");
 						fx.AddCarslot();
 					}
 					if (curLvl >= 99)

@@ -1,20 +1,146 @@
 package br.com.soapboxrace.func;
 
-import br.com.soapboxrace.xmpp.XmppSrv;
-
 public class Constants {
 	public static String powerupXmpp(String PowerupID){
 		return "<message from='nfsw.engine.engine@127.0.0.1/EA_Chat' id='JN_0' to='nfsw.RELAYPERSONA@127.0.0.1'><body>&lt;response status='1' ticket='0'&gt;&lt;PowerupActivated&gt;&lt;Count&gt;1&lt;/Count&gt;&lt;Id&gt;" + PowerupID + "&lt;/Id&gt;&lt;PersonaId&gt;RELAYPERSONA&lt;/PersonaId&gt;&lt;TargetPersonaId&gt;0&lt;/TargetPersonaId&gt;&lt;/PowerupActivated&gt;&lt;/response&gt;</body><subject>LOLnope.</subject></message>";
 	}
 
-	public static void sendChat(String messageText){
-		String chat = "<message from='nfsw.engine.engine@127.0.0.1/EA_Chat' id='JN_0' to='nfsw.RELAYPERSONA@127.0.0.1'><body>&lt;response status='1' ticket='0'&gt;&lt;ChatBroadcast&gt;&lt;ChatBlob&gt;&lt;FromName&gt;System&lt;/FromName&gt;&lt;FromPersonaId&gt;0&lt;/FromPersonaId&gt;&lt;FromUserId&gt;0&lt;/FromUserId&gt;&lt;Message&gt;" + messageText + "&lt;/Message&gt;&lt;ToId&gt;0&lt;/ToId&gt;&lt;Type&gt;2&lt;/Type&gt;&lt;/ChatBlob&gt;&lt;/ChatBroadcast&gt;&lt;/response&gt;</body><subject>LOLnope.</subject></message>";
-		String msg = new String(chat).replace("RELAYPERSONA", Functions.personaId);
-		Long personaIdLong = Long.decode(Functions.personaId);
-		XmppSrv.sendMsg(personaIdLong, msg);
-		return;
+	public static String relayCriptoTicket(){
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("<UdpRelayCryptoTicket>");
+		stringBuilder.append("	<CryptoTicket>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</CryptoTicket>");
+		stringBuilder.append("	<SessionKey>AAAAAAAAAAAAAAAAAAAAAA==</SessionKey>");
+		stringBuilder.append("	<TicketIv>AAAAAAAAAAAAAAAAAAAAAA==</TicketIv>");
+		stringBuilder.append("</UdpRelayCryptoTicket>");
+		return stringBuilder.toString();
 	}
 	
+	public static String acceptInvite(String personaId, String eventId){
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("<LobbyInfo>");
+		stringBuilder.append("  <Countdown>");
+		stringBuilder.append("    <EventId>");
+		stringBuilder.append(eventId);
+		stringBuilder.append("</EventId>");
+		stringBuilder.append("    <IsWaiting>false</IsWaiting>");
+		stringBuilder.append("    <LobbyCountdownInMilliseconds>15000</LobbyCountdownInMilliseconds>");
+		stringBuilder.append("    <LobbyId>100000</LobbyId>");
+		stringBuilder.append("    <LobbyStuckDurationInMilliseconds>3</LobbyStuckDurationInMilliseconds>");
+		stringBuilder.append("  </Countdown>");
+		stringBuilder.append("  <Entrants>");
+		stringBuilder.append("    <LobbyEntrantInfo>");
+		stringBuilder.append("      <GridIndex>0</GridIndex>");
+		stringBuilder.append("      <Heat>1</Heat>");
+		stringBuilder.append("      <Level>10</Level>");
+		stringBuilder.append("      <PersonaId>");
+		stringBuilder.append(personaId);
+		stringBuilder.append("</PersonaId>");
+		stringBuilder.append("      <State>InLobby</State>");
+		stringBuilder.append("    </LobbyEntrantInfo>");
+		stringBuilder.append("    <LobbyEntrantInfo>");
+		stringBuilder.append("      <GridIndex>1</GridIndex>");
+		stringBuilder.append("      <Heat>1</Heat>");
+		stringBuilder.append("      <Level>10</Level>");
+		stringBuilder.append("      <PersonaId>200</PersonaId>");
+		stringBuilder.append("      <State>InLobby</State>");
+		stringBuilder.append("    </LobbyEntrantInfo>");
+		stringBuilder.append("  </Entrants>");
+		stringBuilder.append("  <EventId>");
+		stringBuilder.append(eventId);
+		stringBuilder.append("</EventId>");
+		stringBuilder.append("  <IsInviteEnabled>false</IsInviteEnabled>");
+		stringBuilder.append("  <LobbyId>100000</LobbyId>");
+		stringBuilder.append("  <LobbyInviteId>100000</LobbyInviteId>");
+		stringBuilder.append("</LobbyInfo>");
+		return stringBuilder.toString();
+	}
+	
+	public static String acceptEvent(String personaId, String eventId){
+		StringBuilder packet1 = new StringBuilder();
+		packet1.append("<message from='nfsw.engine.engine7.victoryworker.1@127.0.0.1/EA_Chat' ");
+		packet1.append("id='JN_0' to='nfsw.");
+		packet1.append(personaId);
+		packet1.append("@127.0.0.1'>");
+		packet1.append("<body>&lt;response status='1' ticket='0'&gt;");
+		packet1.append("&lt;LobbyLaunched xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\"&gt;");
+		packet1.append("&lt;CryptoTickets&gt;");
+		packet1.append("&lt;P2PCryptoTicket&gt;");
+		packet1.append("&lt;PersonaId&gt;");
+		packet1.append("200");
+		packet1.append("&lt;/PersonaId&gt;");
+		packet1.append("&lt;SessionKey&gt;AAAAAAAAAAAAAAAAAAAAAA==&lt;/SessionKey&gt;");
+		packet1.append("&lt;/P2PCryptoTicket&gt;");
+		packet1.append("&lt;/CryptoTickets&gt;");
+		packet1.append("&lt;Entrants&gt;");
+		packet1.append("&lt;LobbyEntrantInfo&gt;");
+		packet1.append("&lt;GridIndex&gt;0&lt;/GridIndex&gt;");
+		packet1.append("&lt;Heat&gt;1&lt;/Heat&gt;");
+		packet1.append("&lt;Level&gt;6&lt;/Level&gt;");
+		packet1.append("&lt;PersonaId&gt;");
+		packet1.append(personaId);
+		packet1.append("&lt;/PersonaId&gt;");
+		packet1.append("&lt;State&gt;Unknown&lt;/State&gt;");
+		packet1.append("&lt;/LobbyEntrantInfo&gt;");
+		packet1.append("&lt;LobbyEntrantInfo&gt;");
+		packet1.append("&lt;GridIndex&gt;1&lt;/GridIndex&gt;");
+		packet1.append("&lt;Heat&gt;1&lt;/Heat&gt;");
+		packet1.append("&lt;Level&gt;6&lt;/Level&gt;");
+		packet1.append("&lt;PersonaId&gt;");
+		packet1.append("200");
+		packet1.append("&lt;/PersonaId&gt;");
+		packet1.append("&lt;State&gt;Unknown&lt;/State&gt;");
+		packet1.append("&lt;/LobbyEntrantInfo&gt;");
+		packet1.append("&lt;/Entrants&gt;");
+		packet1.append("&lt;EventSession&gt;");
+		packet1.append("&lt;Challenge&gt;");
+		packet1.append("&lt;ChallengeId&gt;0&lt;/ChallengeId&gt;");
+		packet1.append("&lt;LeftSize&gt;14&lt;/LeftSize&gt;");
+		packet1.append("&lt;Pattern&gt;1&lt;/Pattern&gt;");
+		packet1.append("&lt;RightSize&gt;50&lt;/RightSize&gt;");
+		packet1.append("&lt;/Challenge&gt;");
+		packet1.append("&lt;EventId&gt;");
+		packet1.append(eventId);
+		packet1.append("&lt;/EventId&gt;");
+		packet1.append("&lt;SessionId&gt;");
+		packet1.append("2");
+		packet1.append("&lt;/SessionId&gt;");
+		packet1.append("&lt;/EventSession&gt;");
+		packet1.append("&lt;IsNewRelayServer&gt;true&lt;/IsNewRelayServer&gt;");
+		packet1.append("&lt;LobbyId&gt;");
+		packet1.append("100000");
+		packet1.append("&lt;/LobbyId&gt;");
+		packet1.append("&lt;UdpRelayHost&gt;127.0.0.1&lt;/UdpRelayHost&gt;");
+		packet1.append("&lt;UdpRelayPort&gt;9998&lt;/UdpRelayPort&gt;");
+		packet1.append("&lt;/LobbyLaunched&gt;");
+		packet1.append("&lt;/response&gt;</body>");
+		packet1.append("<subject>");
+		packet1.append("LOLnope");
+		packet1.append("</subject></message>");
+		return packet1.toString();
+	}
+	
+	public static String joinEvent(String personaId, String eventId) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("<message from='nfsw.engine.engine2.victoryworker.2@127.0.0.1/EA_Chat' id='JN_0' to='nfsw.");
+		stringBuilder.append(personaId);
+		stringBuilder.append("@127.0.0.1'>");
+		stringBuilder.append("<body>");
+		stringBuilder.append("&lt;response status='1' ticket='0'&gt;");
+		stringBuilder.append("&lt;LobbyInvite xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" ");
+		stringBuilder.append("xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\"&gt;");
+		stringBuilder.append("&lt;EventId&gt;");
+		stringBuilder.append(eventId);
+		stringBuilder.append("&lt;/EventId&gt;&lt;InviteLifetimeInMilliseconds&gt;10000&lt;/InviteLifetimeInMilliseconds&gt;");
+		stringBuilder.append("&lt;InvitedByPersonaId&gt;0&lt;/InvitedByPersonaId&gt;");
+		stringBuilder.append("&lt;IsPrivate&gt;false&lt;/IsPrivate&gt;&lt;LobbyInviteId&gt;100000&lt;/LobbyInviteId&gt;");
+		stringBuilder.append("&lt;/LobbyInvite&gt;&lt;/response&gt;");
+		stringBuilder.append("</body><subject>");
+		stringBuilder.append("LOLnope");
+		stringBuilder.append("</subject>");
+		stringBuilder.append("</message>");
+		return stringBuilder.toString();
+	}
+
 	public static String WelcomeMessage = "Welcome to Need For Speed™ World Offline.\n"
 										+ "Current Server Version is v1.9.3.\n"
 										+ "Servermod by Keule306.\n"
