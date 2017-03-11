@@ -68,7 +68,7 @@ public class MainWindow extends javax.swing.JFrame {
 
 		aboutLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		aboutLabel1.setText(
-				"<html>soapbox-race-offline server<br/>v 1.9.2 (mod by Keule306)<br/><br/><a href=\"http://www.elitepvpers.com/forum/need-speed-world\">http://www.elitepvpers.com/forum/need-speed-world</a><br/><br/>by:<br/>berkay2578 & Nilzao</html>");
+				"<html>soapbox-race-offline server<br/>v 1.9.3 (mod by Keule306)<br/><br/><a href=\"http://www.elitepvpers.com/forum/need-speed-world\">http://www.elitepvpers.com/forum/need-speed-world</a><br/><br/>by:<br/>berkay2578 & Nilzao</html>");
 		aboutLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
 		javax.swing.GroupLayout aboutPanelLayout = new javax.swing.GroupLayout(aboutPanel);
