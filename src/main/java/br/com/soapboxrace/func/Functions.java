@@ -290,6 +290,14 @@ public class Functions {
 		return;
 	}
 
+	public static void sendAchievement(String time) {
+		String chat1 = "<message from='nfsw.engine.engine@127.0.0.1/EA_Chat' id='JN_0' to='nfsw.RELAYPERSONA@127.0.0.1'><body>&lt;response status='1' ticket='0'&gt;&lt;AchievementAwarded&gt;&lt;AchievedOn&gt;" + time + "&lt;/AchievedOn&gt;&lt;AchievementDefinitionId&gt;96&lt;/AchievementDefinitionId&gt;&lt;AchievementRankId&gt;309&lt;/AchievementRankId&gt;&lt;Clip&gt;AchievementFlasherBase&lt;/Clip&gt;&lt;ClipLengthInSeconds&gt;5&lt;/ClipLengthInSeconds&gt;&lt;Description&gt;GM_ACHIEVEMENT_0000026E&lt;/Description&gt;&lt;Icon&gt;ACH_USE_NOS&lt;/Icon&gt;&lt;IsRare&gt;true&lt;/IsRare&gt;&lt;Name&gt;GM_ACHIEVEMENT_0000010C&lt;/Name&gt;&lt;Points&gt;10&lt;/Points&gt;&lt;Rarity&gt;0&lt;/Rarity&gt;&lt;/AchievementAwarded&gt;&lt;/response&gt;</body><subject>LOLnope.</subject></body></message>";
+		String msg = new String(chat1).replace("RELAYPERSONA", Functions.personaId);
+		Long personaIdLong = Long.decode(Functions.personaId);
+		XmppSrv.sendMsg(personaIdLong, msg);
+		return;
+	}
+
 	public int GetLevel() throws ParserConfigurationException, SAXException, IOException {
 		return Integer.parseInt(DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse("www/soapbox/Engine.svc/personas/" + personaId + "/GetPersonaBaseFromList.xml")
