@@ -151,7 +151,7 @@ public class Functions {
 			Document docSlot = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File("www/soapbox/Engine.svc/personas/" + personaId + "/carslots.xml"));
 			int carId = Integer.parseInt(docSlot.getElementsByTagName("DefaultOwnedCarIndex").item(0).getTextContent());
 			int current = Integer.parseInt(docSlot.getElementsByTagName("Durability").item(carId).getTextContent());
-			if (current > 4) {
+			if (current >= 4) {
 				docSlot.getElementsByTagName("Durability").item(carId).setTextContent(String.valueOf(current - 4));
 			} else {
 				docSlot.getElementsByTagName("Durability").item(carId).setTextContent("0");
@@ -384,7 +384,6 @@ public class Functions {
 			StreamResult result = new StreamResult(sw);
 			DOMSource source = new DOMSource(doc);
 			transformer.transform(source, result);
-
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(location).getAbsoluteFile()));
 			bw.write(sw.toString());
 			bw.close();

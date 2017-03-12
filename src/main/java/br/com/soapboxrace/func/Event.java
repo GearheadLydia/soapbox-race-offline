@@ -29,28 +29,21 @@ public class Event {
 	public static int RaceReward = 0;
 	public static int CardPackDrop = 1;
 	public static int THReward = 2;
-
 	private int exp = 0, cash = 0, rank = 0;
 	private String Rewards = null;
 	private String title = null, hash = null, icon = null, type = null, rspr = null;
 	private boolean leveledUp = false;
 
-	private String[] mapVisual = new String[] {"products_STORE_VANITY_BODYKIT.xml", "products_STORE_VANITY_HOOD.xml",
-			"products_STORE_VANITY_LICENSE_PLATE.xml", "products_STORE_VANITY_LOWERING_KIT.xml", "products_STORE_VANITY_NEON.xml", "products_STORE_VANITY_SPOILER.xml", "products_STORE_VANITY_WHEEL.xml", "products_STORE_VANITY_WINDOW.xml" };
-	private int[][] cashDrop = new int[][] { new int[] { 31, 69, 89, 1000, 2578, 5000, 10000, 20000, 50000, 100000, 1000000 },
-			new int[] { 31, 69, 89, 1000, 50000 } };
+	private String[] mapVisual = new String[] {"products_STORE_VANITY_BODYKIT.xml", "products_STORE_VANITY_HOOD.xml", "products_STORE_VANITY_LICENSE_PLATE.xml", "products_STORE_VANITY_LOWERING_KIT.xml", "products_STORE_VANITY_NEON.xml", "products_STORE_VANITY_SPOILER.xml", "products_STORE_VANITY_WHEEL.xml", "products_STORE_VANITY_WINDOW.xml" };
+	private int[][] cashDrop = new int[][] { new int[] { 31, 69, 89, 1000, 2578, 5000, 10000, 20000, 50000, 100000, 1000000 }, new int[] { 31, 69, 89, 1000, 50000 } };
 
 	public void AddInventoryObject(Node objectData, String rspr) {
 		try {
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document inventory = docBuilder.parse("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml");
 			String md5 = MD5.digest(hash).replace("MD5:", "");
-			if (new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml")), StandardCharsets.UTF_8)
-					.contains("<EntitlementTag>" + md5 + "</EntitlementTag>")) {
-				int index = fx
-						.CountInstances(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml")),
-								StandardCharsets.UTF_8), "<InventoryItemTrans>", "<EntitlementTag>" + md5 + "</EntitlementTag>")
-						- 1;
+			if (new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml")), StandardCharsets.UTF_8).contains("<EntitlementTag>" + md5 + "</EntitlementTag>")) {
+				int index = fx.CountInstances(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml")), StandardCharsets.UTF_8), "<InventoryItemTrans>", "<EntitlementTag>" + md5 + "</EntitlementTag>") - 1;
 				String newAmount = String.valueOf(Integer.parseInt(inventory.getElementsByTagName("RemainingUseCount").item(index).getTextContent()) + 1);
 				inventory.getElementsByTagName("RemainingUseCount").item(index).setTextContent(newAmount);
 			} else {
@@ -86,15 +79,11 @@ public class Event {
 					break;
 				}
 				}
-
 				Node parent = inventory.getElementsByTagName("InventoryItems").item(0);
-				String child = "<InventoryItemTrans><EntitlementTag>" + md5 + "</EntitlementTag><ExpirationDate i:nil=\"true\"/>" + "<Hash>" + hash + "</Hash>"
-						+ "<InventoryId>"
-						+ String.valueOf(Integer.parseInt(inventory.getElementsByTagName("InventoryId")
-								.item(inventory.getElementsByTagName("InventoryId").getLength() - 1).getTextContent()) + 1)
+				String child = "<InventoryItemTrans><EntitlementTag>" + md5 + "</EntitlementTag><ExpirationDate i:nil=\"true\"/>" + "<Hash>" + hash + "</Hash><InventoryId>"
+						+ String.valueOf(Integer.parseInt(inventory.getElementsByTagName("InventoryId").item(inventory.getElementsByTagName("InventoryId").getLength() - 1).getTextContent()) + 1)
 						+ "</InventoryId><ProductId>DO NOT USE ME</ProductId><RemainingUseCount>1</RemainingUseCount>" + "<ResellPrice>"
-						+ String.valueOf((int) Math
-								.round(Double.parseDouble(rspr) / 2.0))
+						+ String.valueOf((int) Math.round(Double.parseDouble(rspr) / 2.0))
 						+ ".00000</ResellPrice><Status>ACTIVE</Status>" + "<StringHash>0x" + Long.toHexString(Long.parseLong(hash)) + "</StringHash>"
 						+ "<VirtualItemType>" + type + "</VirtualItemType></InventoryItemTrans>";
 				Node fragmentNode = docBuilder.parse(new InputSource(new StringReader(child))).getDocumentElement();
@@ -109,15 +98,12 @@ public class Event {
 
 	public void AddCar(String basketId) throws ParserConfigurationException, SAXException, IOException {
 		fx.FixCarslots();
-
 		DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml"));
 		int lastIdIndex = doc.getElementsByTagName("Id").getLength() - 1;
 		String carId = String.valueOf(Integer.parseInt(doc.getElementsByTagName("Id").item(lastIdIndex).getTextContent()) + 1);
-
 		Document doc2 = docBuilder.parse(new File("www/basket/" + basketId + ".xml"));
 		doc2.getElementsByTagName("Id").item(1).setTextContent(carId);
-
 		Node carTrans = doc.importNode(doc2.getFirstChild(), true);
 		doc.getElementsByTagName("CarsOwnedByPersona").item(0).appendChild(carTrans);
 		int _carId = Integer.parseInt(carId) - 1;
@@ -138,51 +124,34 @@ public class Event {
 			if (dropNum == -1) {
 				int tipToe = 0, amount = 0;
 				double d = Math.random() * 100;
-				if ((d -= 10) < 0)
-					tipToe = 1;
-				d = Math.random() * 1000;
+				if ((d -= 10) < 0) tipToe = 1; d = Math.random() * 1000;
 				if (tipToe == 0) {
-					if ((d -= 1) < 0)
-						amount = cashDrop[tipToe][10];
-					else if ((d -= 5) < 0)
-						amount = cashDrop[tipToe][9];
-					else if ((d -= 100) < 0)
-						amount = cashDrop[tipToe][8];
-					else if ((d -= 250) < 0)
-						amount = cashDrop[tipToe][7];
-					else if ((d -= 500) < 0)
-						amount = cashDrop[tipToe][6];
-					else if ((d -= 750) < 0)
-						amount = cashDrop[tipToe][5];
-					else
-						amount = cashDrop[tipToe][rand.nextInt(5)];
+					if ((d -= 1) < 0)		 amount = cashDrop[tipToe][10];
+					else if ((d -= 5) < 0)	 amount = cashDrop[tipToe][9];
+					else if ((d -= 100) < 0) amount = cashDrop[tipToe][8];
+					else if ((d -= 250) < 0) amount = cashDrop[tipToe][7];
+					else if ((d -= 500) < 0) amount = cashDrop[tipToe][6];
+					else if ((d -= 750) < 0) amount = cashDrop[tipToe][5];
+					else					 amount = cashDrop[tipToe][rand.nextInt(5)];
 				} else {
-					if ((d -= 10) < 0)
-						amount = cashDrop[tipToe][4];
-					else if ((d -= 50) < 0)
-						amount = cashDrop[tipToe][3];
-					else
-						amount = cashDrop[tipToe][rand.nextInt(3)];
+					if ((d -= 10) < 0)		 amount = cashDrop[tipToe][4];
+					else if ((d -= 50) < 0)  amount = cashDrop[tipToe][3];
+					else					 amount = cashDrop[tipToe][rand.nextInt(3)];
 				}
-
 				Economy economy = new Economy(String.valueOf(amount), String.valueOf(tipToe), true);
 				economy.transCurrency(false);
-
 				title = String.valueOf(amount) + (tipToe == 0 ? " IGC" : " BOOST");
 				hash = "3865073706";
 				icon = "128_cash";
 				type = "CASH";
 				return;
-			} else if (dropNum == 0) {
-				catalog = docBuilder.parse(new InputSource(new StringReader(Constants.Powerups)));
-			} else if (dropNum == 1) {
-				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_SKILLMODPARTS.xml");
-			} else if (dropNum == 2) {
-				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/" + mapVisual[rand.nextInt(8)]);
+			} else if (dropNum == 0) {catalog = docBuilder.parse(new InputSource(new StringReader(Constants.Powerups)));
+			} else if (dropNum == 1) {catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_SKILLMODPARTS.xml");
+			} else if (dropNum == 2) {catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/" + mapVisual[rand.nextInt(8)]);
 			} else if (dropNum == 3) {
 				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_PERFORMANCEPARTS.xml");
 				catId = rand.nextInt(catalog.getElementsByTagName("ProductTrans").getLength());
-				title = (catalog.getElementsByTagName("Description").item(catId).getTextContent() + catalog.getElementsByTagName("ProductTitle").item(catId).getTextContent().replace(catalog.getElementsByTagName("ProductTitle").item(catId).getTextContent().split(" ")[0], ""));
+				title = catalog.getElementsByTagName("ProductTitle").item(catId).getTextContent();
 				hash = catalog.getElementsByTagName("Hash").item(catId).getTextContent();
 				icon = catalog.getElementsByTagName("Icon").item(catId).getTextContent();
 				type = catalog.getElementsByTagName("ProductType").item(catId).getTextContent();
@@ -196,8 +165,7 @@ public class Event {
 			icon = catalog.getElementsByTagName("Icon").item(catId).getTextContent();
 			type = catalog.getElementsByTagName("ProductType").item(catId).getTextContent();
 			if (dropNum == 0) {
-				int pAm = rand.nextInt(31)+4;
-				processPowerup(hash, pAm);
+				int pAm = rand.nextInt(31)+4; processPowerup(hash, pAm);
 				title = String.valueOf(pAm) + "x " + title.replace(" x15", "");
 			} else
 				AddInventoryObject(catalog.getElementsByTagName("ProductTrans").item(catId), "0");
@@ -209,35 +177,22 @@ public class Event {
 	public void SetPrize(int RewardType) throws DOMException, SAXException, IOException, ParserConfigurationException {
 		String LuckyDrawItem = GetPrize();
 		if (RewardType == RaceReward) {
-			Functions.answerData = "<Accolades><FinalRewards><Rep>"
-					+ String.valueOf(exp)
-					+ "</Rep><Tokens>"
-					+ String.valueOf(cash)
-					+ "</Tokens></FinalRewards><HasLeveledUp>"
-					+ String.valueOf(leveledUp)
-					+ "</HasLeveledUp>"
+			Functions.answerData = "<Accolades><FinalRewards><Rep>" + String.valueOf(exp) + "</Rep><Tokens>" + String.valueOf(cash) + "</Tokens></FinalRewards><HasLeveledUp>" + String.valueOf(leveledUp) + "</HasLeveledUp>"
 					+ (type == "BUSTED" ? "<LuckyDrawInfo/>" : ("<LuckyDrawInfo><Boxes i:nil=\"true\"/><CardDeck>"
 					+ (type == "PRESETCAR" ? "LD_CARD_SPECIAL_GOLD" : (rank == 1 ? "LD_CARD_GOLD" : (rank == 2 ? "LD_CARD_SILVER" : (rank == 3 ? "LD_CARD_BRONZE" : "LD_CARD_BLUE"))))
-					+ "</CardDeck><CurrentStreak>0</CurrentStreak><IsStreakBroken>false</IsStreakBroken><Items>"
-					+ LuckyDrawItem
-					+ "</Items><NumBoxAnimations>100</NumBoxAnimations><NumCards>5</NumCards></LuckyDrawInfo>"))
+					+ "</CardDeck><CurrentStreak>0</CurrentStreak><IsStreakBroken>false</IsStreakBroken><Items>" + LuckyDrawItem + "</Items><NumBoxAnimations>100</NumBoxAnimations><NumCards>5</NumCards></LuckyDrawInfo>"))
 					+ "<OriginalRewards><Rep>0</Rep><Tokens>0</Tokens></OriginalRewards><RewardInfo>" + Rewards + "</RewardInfo></Accolades>";
 		} else if (RewardType == THReward) {
-			Functions.answerData = "<Accolades><FinalRewards><Rep>"
-					+ String.valueOf(exp) + "</Rep><Tokens>" + String.valueOf(cash) + "</Tokens></FinalRewards><HasLeveledUp>" + String.valueOf(leveledUp)
-					+ "</HasLeveledUp><LuckyDrawInfo><Boxes><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox></Boxes><CurrentStreak>"
-					+ String.valueOf(fx.GetTHStreak()) + "</CurrentStreak><IsStreakBroken>false</IsStreakBroken><Items>"
-					+ LuckyDrawItem
-					+ "</Items><NumBoxAnimations>100</NumBoxAnimations></LuckyDrawInfo><OriginalRewards><Rep>0</Rep><Tokens>0</Tokens></OriginalRewards><RewardInfo>"
-					+ Rewards + "</RewardInfo></Accolades>";
+			Functions.answerData = "<Accolades><FinalRewards><Rep>" + String.valueOf(exp) + "</Rep><Tokens>" + String.valueOf(cash) + "</Tokens></FinalRewards><HasLeveledUp>" + String.valueOf(leveledUp) + "</HasLeveledUp>"
+					+ "<LuckyDrawInfo><Boxes><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox><LuckyBox><CardDeck>LD_CARD_SILVER</CardDeck></LuckyBox></Boxes>"
+					+ "<CurrentStreak>" + String.valueOf(fx.GetTHStreak()) + "</CurrentStreak><IsStreakBroken>false</IsStreakBroken><Items>" + LuckyDrawItem + "</Items><NumBoxAnimations>100</NumBoxAnimations></LuckyDrawInfo>"
+					+ "<OriginalRewards><Rep>0</Rep><Tokens>0</Tokens></OriginalRewards><RewardInfo>" + Rewards + "</RewardInfo></Accolades>";
 			fx.WriteText("www/soapbox/Engine.svc/settings/THDate", LocalDate.now().toString());
 		}
 	}
 
 	private String GetPrize() {
-		return "<LuckyDrawItem><Description>" + title + "</Description><Hash>" + hash + "</Hash><Icon>" + icon
-				+ "</Icon><RemainingUseCount>1</RemainingUseCount><ResellPrice>0</ResellPrice><VirtualItem>LARGE_DROP</VirtualItem><VirtualItemType>" + type
-				+ "</VirtualItemType><WasSold>false</WasSold></LuckyDrawItem>";
+		return "<LuckyDrawItem><Description>" + title + "</Description><Hash>" + hash + "</Hash><Icon>" + icon + "</Icon><RemainingUseCount>1</RemainingUseCount><ResellPrice>0</ResellPrice><VirtualItem>LARGE_DROP</VirtualItem><VirtualItemType>" + type + "</VirtualItemType><WasSold>false</WasSold></LuckyDrawItem>";
 	}
 
 	private void saveAccolades() throws SAXException, IOException, ParserConfigurationException {
@@ -246,7 +201,6 @@ public class Event {
 		int sessionId = Integer.parseInt(doc.getElementsByTagName("defaultPersonaIdx").item(0).getTextContent());
 		Document doc2 = docBuilder.parse("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/GetPersonaInfo.xml");
 		Document doc3 = docBuilder.parse("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/GetPersonaBaseFromList.xml");
-
 		int newCash = Integer.parseInt(doc2.getElementsByTagName("Cash").item(0).getTextContent());
 		newCash = newCash + cash;
 		if (newCash > 999999999) {
@@ -254,7 +208,6 @@ public class Event {
 		}
 		doc.getElementsByTagName("Cash").item(sessionId).setTextContent(String.valueOf(newCash));
 		doc2.getElementsByTagName("Cash").item(0).setTextContent(String.valueOf(newCash));
-
 		int curLvl = Integer.parseInt(doc2.getElementsByTagName("Level").item(0).getTextContent()) - 1;
 
 		if (curLvl < 99) {
@@ -264,8 +217,7 @@ public class Event {
 			curLvlRep = curLvlRep + exp;
 
 			Document expMap = docBuilder.parse(new InputSource(new StringReader(Constants.ExpLvlPtsMap)));
-			int lvlExp = (Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl).getTextContent())
-					- (curLvl == 0 ? 0 : (Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl - 1).getTextContent()))) - 100);
+			int lvlExp = (Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl).getTextContent()) - (curLvl == 0 ? 0 : (Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl - 1).getTextContent()))) - 100);
 			leveledUp = (lvlExp - curLvlRep <= 0);
 
 			if (leveledUp) {
@@ -274,7 +226,6 @@ public class Event {
 					curLvlRep = curLvlRep - lvlExp;
 					curLvl = curLvl + 1;
 					Functions.sendChat("Congratulations, you reached level "+ Integer.valueOf(curLvl+1) +"!");
-
 					if (curLvl % 10 == 9) {
 						Document catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_PRESET_RIDES_ALL_Category.xml");
 						int catId = rand.nextInt(catalog.getElementsByTagName("ProductTrans").getLength());
@@ -286,14 +237,11 @@ public class Event {
 						Functions.sendChat("You won a free Car + Carslot!");
 						fx.AddCarslot();
 					}
-					if (curLvl >= 99)
-						break;
-					lvlExp = (Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl).getTextContent())
-							- Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl - 1).getTextContent())) - 100;
+					if (curLvl >= 99) break;
+					lvlExp = (Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl).getTextContent()) - Integer.parseInt(expMap.getElementsByTagName("int").item(curLvl - 1).getTextContent())) - 100;
 					_leveledUp = (lvlExp - curLvlRep <= 0);
 				}
 			}
-
 			double percent = 0.0;
 			if (curLvl >= 99) {
 				curLvlRep = 0;
@@ -315,7 +263,6 @@ public class Event {
 			doc.getElementsByTagName("PercentToLevel").item(sessionId).setTextContent(String.valueOf(percent));
 			doc2.getElementsByTagName("PercentToLevel").item(0).setTextContent(String.valueOf(percent));
 		}
-
 		fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/GetPermanentSession.xml");
 		fx.WriteXML(doc2, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/GetPersonaInfo.xml");
 		fx.WriteXML(doc3, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/GetPersonaBaseFromList.xml");
@@ -325,8 +272,7 @@ public class Event {
 		try {
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document inventory = docBuilder.parse("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml");
-			int index = fx.CountInstances(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml")),
-					StandardCharsets.UTF_8), "<InventoryItemTrans>", "<Hash>" + PowerupHash + "</Hash>") - 1;
+			int index = fx.CountInstances(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml")), StandardCharsets.UTF_8), "<InventoryItemTrans>", "<Hash>" + PowerupHash + "</Hash>") - 1;
 			String newAmount = String.valueOf(Integer.parseInt(inventory.getElementsByTagName("RemainingUseCount").item(index).getTextContent()) + amount);
 			inventory.getElementsByTagName("RemainingUseCount").item(index).setTextContent(newAmount);
 			fx.WriteXML(inventory, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects.xml");
@@ -334,15 +280,17 @@ public class Event {
 			e.printStackTrace();
 		}
 	}
+
 	public String ReadBust() {
 		return Functions.answerData = "<PursuitEventResult><Accolades><FinalRewards><Rep>0</Rep><Tokens>0</Tokens></FinalRewards><HasLeveledUp>false</HasLeveledUp><LuckyDrawInfo i:nil=\"true\"/><OriginalRewards><Rep>0</Rep><Tokens>0</Tokens></OriginalRewards><RewardInfo/></Accolades><Durability>100</Durability><EventId>0</EventId><EventSessionId>2</EventSessionId><ExitPath>ExitToFreeroam</ExitPath><InviteLifetimeInMilliseconds>0</InviteLifetimeInMilliseconds><LobbyInviteId>0</LobbyInviteId><PersonaId>RELAYPERSONA</PersonaId><Heat>1</Heat></PursuitEventResult>";
 	}
+
 	public void ReadArbitration(String arbitrationData) {
+		Functions.log(arbitrationData);
 		try {
 			leveledUp = false;
 			Rewards = "";
 			int eventType = (arbitrationData.startsWith("<DragArbitrationPacket") ? 0 : (arbitrationData.startsWith("<TeamEscapeArbitrationPacket") ? 2 : 1));
-
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse(new InputSource(new StringReader(arbitrationData)));
 			if (arbitrationData.startsWith("<TeamEscapeArbitrationPacket") && doc.getElementsByTagName("FinishReason").item(0).getTextContent().equals("266")) {
@@ -355,75 +303,47 @@ public class Event {
 				type = "BUSTED";
 			} else if (arbitrationData.equals("<TreasureHunt/>")) {
 				cash = 1000 * fx.GetLevel();
-				if (fx.GetLevel() == 100) {
-					exp = 0;
-				} else {
-					exp = 250 * fx.GetLevel();
-				}
-				Rewards = "<RewardPart><RepPart>" + String.valueOf(exp)
-						+ "</RepPart><RewardCategory>Rank</RewardCategory><RewardType>None</RewardType><TokenPart>" + String.valueOf(cash)
-						+ "</TokenPart></RewardPart>";
+				if (fx.GetLevel() == 100) {exp = 0;} else {exp = 250 * fx.GetLevel();}
+				Rewards = "<RewardPart><RepPart>" + String.valueOf(exp) + "</RepPart><RewardCategory>Rank</RewardCategory><RewardType>None</RewardType><TokenPart>" + String.valueOf(cash) + "</TokenPart></RewardPart>";
 				title = "5000 BOOST";
 				hash = "3865073706";
 				icon = "128_cash";
 				type = "CASH";
 				saveAccolades();
-				if (type.equals("CASH")) {
-					Economy economy = new Economy("5000", "1", true);
-					economy.transCurrency(false);
-				}
+				if (type.equals("CASH")) {Economy economy = new Economy("5000", "1", true); economy.transCurrency(false);}
 				SetPrize(THReward);
 				return;
 			} else {
 				rank = arbitrationData.startsWith("<Pursuit") ? 2 : Integer.parseInt(doc.getElementsByTagName("Rank").item(0).getTextContent());
 				int baseReward = Functions.rewards[0];
 				cash = (int) Math.round((double) (rank == 1 ? baseReward : (rank == 2 ? ((double) baseReward / 2.0) : (rank == 3 ? ((double) baseReward / 4.0) : ((double) baseReward / 20.0)))) * Functions.multipliers[eventType]);
-				if (fx.GetLevel() >= 100) {
-					exp = 0;
-				} else {
-					exp = (int) Math.round((double) (50 * fx.GetLevel()) + ((53 * fx.GetLevel()) * (rank <= 3 ? Math.abs(rank - 5) : 1)) * Functions.multipliers[eventType]);
-				}
-
-				Rewards = "<RewardPart><RepPart>" + String.valueOf(exp)
-						+ "</RepPart><RewardCategory>Rank</RewardCategory><RewardType>None</RewardType><TokenPart>" + String.valueOf(cash)
-						+ "</TokenPart></RewardPart>";
+				if (fx.GetLevel() >= 100) {exp = 0;} else {exp = (int) Math.round((double) (50 * fx.GetLevel()) + ((53 * fx.GetLevel()) * (rank <= 3 ? Math.abs(rank - 5) : 1)) * Functions.multipliers[eventType]);}
+				Rewards = "<RewardPart><RepPart>" + String.valueOf(exp) + "</RepPart><RewardCategory>Rank</RewardCategory><RewardType>None</RewardType><TokenPart>" + String.valueOf(cash) + "</TokenPart></RewardPart>";
 				if (!arbitrationData.startsWith("<Pursuit")) {
 					if (doc.getElementsByTagName("PerfectStart").item(0).getTextContent().equals("1")) {
 						int[] perfRewards = new int[] { (int) Math.round((double) Functions.rewards[2] * Functions.multipliers[eventType]), (int) Math.round((double) Functions.rewards[1] * Functions.multipliers[eventType]) };
 						cash = cash + perfRewards[0];
 						exp += (exp == 0 ? 0 : perfRewards[1]);
-						Rewards = Rewards + "<RewardPart><RepPart>" + (exp == 0 ? "0" : String.valueOf(perfRewards[1]))
-								+ "</RepPart><RewardCategory>Bonus</RewardCategory><RewardType>PerfectStart</RewardType><TokenPart>"
-								+ String.valueOf(perfRewards[1]) + "</TokenPart></RewardPart>";
+						Rewards = Rewards + "<RewardPart><RepPart>" + (exp == 0 ? "0" : String.valueOf(perfRewards[1])) + "</RepPart><RewardCategory>Bonus</RewardCategory><RewardType>PerfectStart</RewardType><TokenPart>" + String.valueOf(perfRewards[1]) + "</TokenPart></RewardPart>";
 					}
 					int[] ramRewards = new int[] { (int) Math.round((double) Functions.rewards[4] * Functions.multipliers[eventType]), (int) Math.round((double) Functions.rewards[3] * Functions.multipliers[eventType]) };
 					if (doc.getElementsByTagName("NumberOfCollisions").item(0).getTextContent().equals("0")) {
 						cash = cash + ramRewards[0];
 						exp += (exp == 0 ? 0 : ramRewards[1]);
-						Rewards = Rewards + "<RewardPart><RepPart>" + (exp == 0 ? "0" : String.valueOf(ramRewards[1]))
-								+ "</RepPart><RewardCategory>TeamBonus</RewardCategory><RewardType>TeamStrikeBonus</RewardType><TokenPart>"
-								+ String.valueOf(ramRewards[0]) + "</TokenPart></RewardPart>";
+						Rewards = Rewards + "<RewardPart><RepPart>" + (exp == 0 ? "0" : String.valueOf(ramRewards[1])) + "</RepPart><RewardCategory>TeamBonus</RewardCategory><RewardType>TeamStrikeBonus</RewardType><TokenPart>" + String.valueOf(ramRewards[0]) + "</TokenPart></RewardPart>";
 					} else if (doc.getElementsByTagName("NumberOfCollisions").item(0).getTextContent().equals("1")) {
 						cash = cash + (int) Math.round(100.0 * Functions.multipliers[eventType]);
 						exp += (exp == 0 ? 0 : (int) Math.round(100.0 * Functions.multipliers[eventType]));
-						Rewards = Rewards + "<RewardPart><RepPart>"
-								+ (exp == 0 ? "0" : String.valueOf((int) Math.round(100.0 * Functions.multipliers[eventType])))
-								+ "</RepPart><RewardCategory>TeamBonus</RewardCategory><RewardType>TeamStrikeBonus</RewardType><TokenPart>"
-								+ String.valueOf((int) Math.round(100.0 * Functions.multipliers[eventType])) + "</TokenPart></RewardPart>";
+						Rewards = Rewards + "<RewardPart><RepPart>" + (exp == 0 ? "0" : String.valueOf((int) Math.round(100.0 * Functions.multipliers[eventType]))) + "</RepPart><RewardCategory>TeamBonus</RewardCategory><RewardType>TeamStrikeBonus</RewardType><TokenPart>" + String.valueOf((int) Math.round(100.0 * Functions.multipliers[eventType])) + "</TokenPart></RewardPart>";
 					}
 				}
 				randCatalog();
 				saveAccolades();
 			}
-			Functions.answerData = "<PursuitEventResult><Accolades><FinalRewards><Rep>"
-					+ String.valueOf(exp) + "</Rep><Tokens>" + String.valueOf(cash) + "</Tokens></FinalRewards><HasLeveledUp>" + String.valueOf(leveledUp)
-					+ "</HasLeveledUp>"
+			Functions.answerData = "<PursuitEventResult><Accolades><FinalRewards><Rep>" + String.valueOf(exp) + "</Rep><Tokens>" + String.valueOf(cash) + "</Tokens></FinalRewards><HasLeveledUp>" + String.valueOf(leveledUp) + "</HasLeveledUp>"
 					+ ((cash == 0 && exp == 0) ? "<LuckyDrawInfo/>" : ("<LuckyDrawInfo><Boxes i:nil=\"true\"/><CardDeck>" + (type == "PRESETCAR" ? "LD_CARD_SPECIAL_GOLD" : "LD_CARD_SILVER")
-					+ "</CardDeck><CurrentStreak>0</CurrentStreak><IsStreakBroken>false</IsStreakBroken><Items>"
-					+ GetPrize()
-					+ "</Items><NumBoxAnimations>100</NumBoxAnimations><NumCards>5</NumCards></LuckyDrawInfo>"))
-					+ "<OriginalRewards><Rep>0</Rep><Tokens>0</Tokens></OriginalRewards><RewardInfo>" + Rewards
-					+ "</RewardInfo></Accolades><Durability>100</Durability><EventId>384</EventId><EventSessionId>2</EventSessionId><ExitPath>ExitToFreeroam</ExitPath><InviteLifetimeInMilliseconds>0</InviteLifetimeInMilliseconds><LobbyInviteId>0</LobbyInviteId><PersonaId>RELAYPERSONA</PersonaId><Heat>1</Heat></PursuitEventResult>";
+					+ "</CardDeck><CurrentStreak>0</CurrentStreak><IsStreakBroken>false</IsStreakBroken><Items>" + GetPrize() + "</Items><NumBoxAnimations>100</NumBoxAnimations><NumCards>5</NumCards></LuckyDrawInfo>"))
+					+ "<OriginalRewards><Rep>0</Rep><Tokens>0</Tokens></OriginalRewards><RewardInfo>" + Rewards + "</RewardInfo></Accolades><Durability>100</Durability><EventId>384</EventId><EventSessionId>2</EventSessionId><ExitPath>ExitToFreeroam</ExitPath><InviteLifetimeInMilliseconds>0</InviteLifetimeInMilliseconds><LobbyInviteId>0</LobbyInviteId><PersonaId>RELAYPERSONA</PersonaId><Heat>1</Heat></PursuitEventResult>";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1,146 +1,6 @@
 package br.com.soapboxrace.func;
 
 public class Constants {
-	public static String powerupXmpp(String PowerupID){
-		return "<message from='nfsw.engine.engine@127.0.0.1/EA_Chat' id='JN_0' to='nfsw.RELAYPERSONA@127.0.0.1'><body>&lt;response status='1' ticket='0'&gt;&lt;PowerupActivated&gt;&lt;Count&gt;1&lt;/Count&gt;&lt;Id&gt;" + PowerupID + "&lt;/Id&gt;&lt;PersonaId&gt;RELAYPERSONA&lt;/PersonaId&gt;&lt;TargetPersonaId&gt;0&lt;/TargetPersonaId&gt;&lt;/PowerupActivated&gt;&lt;/response&gt;</body><subject>LOLnope.</subject></message>";
-	}
-
-	public static String relayCriptoTicket(){
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("<UdpRelayCryptoTicket>");
-		stringBuilder.append("	<CryptoTicket>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</CryptoTicket>");
-		stringBuilder.append("	<SessionKey>AAAAAAAAAAAAAAAAAAAAAA==</SessionKey>");
-		stringBuilder.append("	<TicketIv>AAAAAAAAAAAAAAAAAAAAAA==</TicketIv>");
-		stringBuilder.append("</UdpRelayCryptoTicket>");
-		return stringBuilder.toString();
-	}
-	
-	public static String acceptInvite(String personaId, String eventId){
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("<LobbyInfo>");
-		stringBuilder.append("  <Countdown>");
-		stringBuilder.append("    <EventId>");
-		stringBuilder.append(eventId);
-		stringBuilder.append("</EventId>");
-		stringBuilder.append("    <IsWaiting>false</IsWaiting>");
-		stringBuilder.append("    <LobbyCountdownInMilliseconds>15000</LobbyCountdownInMilliseconds>");
-		stringBuilder.append("    <LobbyId>100000</LobbyId>");
-		stringBuilder.append("    <LobbyStuckDurationInMilliseconds>3</LobbyStuckDurationInMilliseconds>");
-		stringBuilder.append("  </Countdown>");
-		stringBuilder.append("  <Entrants>");
-		stringBuilder.append("    <LobbyEntrantInfo>");
-		stringBuilder.append("      <GridIndex>0</GridIndex>");
-		stringBuilder.append("      <Heat>1</Heat>");
-		stringBuilder.append("      <Level>10</Level>");
-		stringBuilder.append("      <PersonaId>");
-		stringBuilder.append(personaId);
-		stringBuilder.append("</PersonaId>");
-		stringBuilder.append("      <State>InLobby</State>");
-		stringBuilder.append("    </LobbyEntrantInfo>");
-		stringBuilder.append("    <LobbyEntrantInfo>");
-		stringBuilder.append("      <GridIndex>1</GridIndex>");
-		stringBuilder.append("      <Heat>1</Heat>");
-		stringBuilder.append("      <Level>10</Level>");
-		stringBuilder.append("      <PersonaId>200</PersonaId>");
-		stringBuilder.append("      <State>InLobby</State>");
-		stringBuilder.append("    </LobbyEntrantInfo>");
-		stringBuilder.append("  </Entrants>");
-		stringBuilder.append("  <EventId>");
-		stringBuilder.append(eventId);
-		stringBuilder.append("</EventId>");
-		stringBuilder.append("  <IsInviteEnabled>false</IsInviteEnabled>");
-		stringBuilder.append("  <LobbyId>100000</LobbyId>");
-		stringBuilder.append("  <LobbyInviteId>100000</LobbyInviteId>");
-		stringBuilder.append("</LobbyInfo>");
-		return stringBuilder.toString();
-	}
-	
-	public static String acceptEvent(String personaId, String eventId){
-		StringBuilder packet1 = new StringBuilder();
-		packet1.append("<message from='nfsw.engine.engine7.victoryworker.1@127.0.0.1/EA_Chat' ");
-		packet1.append("id='JN_0' to='nfsw.");
-		packet1.append(personaId);
-		packet1.append("@127.0.0.1'>");
-		packet1.append("<body>&lt;response status='1' ticket='0'&gt;");
-		packet1.append("&lt;LobbyLaunched xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\"&gt;");
-		packet1.append("&lt;CryptoTickets&gt;");
-		packet1.append("&lt;P2PCryptoTicket&gt;");
-		packet1.append("&lt;PersonaId&gt;");
-		packet1.append("200");
-		packet1.append("&lt;/PersonaId&gt;");
-		packet1.append("&lt;SessionKey&gt;AAAAAAAAAAAAAAAAAAAAAA==&lt;/SessionKey&gt;");
-		packet1.append("&lt;/P2PCryptoTicket&gt;");
-		packet1.append("&lt;/CryptoTickets&gt;");
-		packet1.append("&lt;Entrants&gt;");
-		packet1.append("&lt;LobbyEntrantInfo&gt;");
-		packet1.append("&lt;GridIndex&gt;0&lt;/GridIndex&gt;");
-		packet1.append("&lt;Heat&gt;1&lt;/Heat&gt;");
-		packet1.append("&lt;Level&gt;6&lt;/Level&gt;");
-		packet1.append("&lt;PersonaId&gt;");
-		packet1.append(personaId);
-		packet1.append("&lt;/PersonaId&gt;");
-		packet1.append("&lt;State&gt;Unknown&lt;/State&gt;");
-		packet1.append("&lt;/LobbyEntrantInfo&gt;");
-		packet1.append("&lt;LobbyEntrantInfo&gt;");
-		packet1.append("&lt;GridIndex&gt;1&lt;/GridIndex&gt;");
-		packet1.append("&lt;Heat&gt;1&lt;/Heat&gt;");
-		packet1.append("&lt;Level&gt;6&lt;/Level&gt;");
-		packet1.append("&lt;PersonaId&gt;");
-		packet1.append("200");
-		packet1.append("&lt;/PersonaId&gt;");
-		packet1.append("&lt;State&gt;Unknown&lt;/State&gt;");
-		packet1.append("&lt;/LobbyEntrantInfo&gt;");
-		packet1.append("&lt;/Entrants&gt;");
-		packet1.append("&lt;EventSession&gt;");
-		packet1.append("&lt;Challenge&gt;");
-		packet1.append("&lt;ChallengeId&gt;0&lt;/ChallengeId&gt;");
-		packet1.append("&lt;LeftSize&gt;14&lt;/LeftSize&gt;");
-		packet1.append("&lt;Pattern&gt;1&lt;/Pattern&gt;");
-		packet1.append("&lt;RightSize&gt;50&lt;/RightSize&gt;");
-		packet1.append("&lt;/Challenge&gt;");
-		packet1.append("&lt;EventId&gt;");
-		packet1.append(eventId);
-		packet1.append("&lt;/EventId&gt;");
-		packet1.append("&lt;SessionId&gt;");
-		packet1.append("2");
-		packet1.append("&lt;/SessionId&gt;");
-		packet1.append("&lt;/EventSession&gt;");
-		packet1.append("&lt;IsNewRelayServer&gt;true&lt;/IsNewRelayServer&gt;");
-		packet1.append("&lt;LobbyId&gt;");
-		packet1.append("100000");
-		packet1.append("&lt;/LobbyId&gt;");
-		packet1.append("&lt;UdpRelayHost&gt;127.0.0.1&lt;/UdpRelayHost&gt;");
-		packet1.append("&lt;UdpRelayPort&gt;9998&lt;/UdpRelayPort&gt;");
-		packet1.append("&lt;/LobbyLaunched&gt;");
-		packet1.append("&lt;/response&gt;</body>");
-		packet1.append("<subject>");
-		packet1.append("LOLnope");
-		packet1.append("</subject></message>");
-		return packet1.toString();
-	}
-	
-	public static String joinEvent(String personaId, String eventId) {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("<message from='nfsw.engine.engine2.victoryworker.2@127.0.0.1/EA_Chat' id='JN_0' to='nfsw.");
-		stringBuilder.append(personaId);
-		stringBuilder.append("@127.0.0.1'>");
-		stringBuilder.append("<body>");
-		stringBuilder.append("&lt;response status='1' ticket='0'&gt;");
-		stringBuilder.append("&lt;LobbyInvite xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-		stringBuilder.append("xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\"&gt;");
-		stringBuilder.append("&lt;EventId&gt;");
-		stringBuilder.append(eventId);
-		stringBuilder.append("&lt;/EventId&gt;&lt;InviteLifetimeInMilliseconds&gt;10000&lt;/InviteLifetimeInMilliseconds&gt;");
-		stringBuilder.append("&lt;InvitedByPersonaId&gt;0&lt;/InvitedByPersonaId&gt;");
-		stringBuilder.append("&lt;IsPrivate&gt;false&lt;/IsPrivate&gt;&lt;LobbyInviteId&gt;100000&lt;/LobbyInviteId&gt;");
-		stringBuilder.append("&lt;/LobbyInvite&gt;&lt;/response&gt;");
-		stringBuilder.append("</body><subject>");
-		stringBuilder.append("LOLnope");
-		stringBuilder.append("</subject>");
-		stringBuilder.append("</message>");
-		return stringBuilder.toString();
-	}
-
 	public static String WelcomeMessage = "Welcome to Need For Speed™ World Offline.\n"
 										+ "Current Server Version is v1.9.3.\n"
 										+ "Servermod by Keule306.\n"
@@ -163,6 +23,8 @@ public class Constants {
 	public static String LoginAnnouncements = "<LoginAnnouncementsDefinition><Announcements><LoginAnnouncementDefinition><Context>NotApplicable</Context><Id>1</Id><ImageChecksum>-1</ImageChecksum><ImageUrl>3.jpg</ImageUrl><Type>ImageOnly</Type></LoginAnnouncementDefinition><LoginAnnouncementDefinition><Context>NotApplicable</Context><Id>2</Id><ImageChecksum>-1</ImageChecksum><ImageUrl>2.jpg</ImageUrl><Type>ImageOnly</Type></LoginAnnouncementDefinition><LoginAnnouncementDefinition><Context>NotApplicable</Context><Id>3</Id><ImageChecksum>-1</ImageChecksum><ImageUrl>1.jpg</ImageUrl><Type>ImageOnly</Type></LoginAnnouncementDefinition><LoginAnnouncementDefinition><Context>NotApplicable</Context><Id>4</Id><ImageChecksum>-1</ImageChecksum><ImageUrl>0.jpg</ImageUrl><Type>ImageOnly</Type></LoginAnnouncementDefinition></Announcements><ImagesPath>http://localhost:7331/announcements</ImagesPath></LoginAnnouncementsDefinition>";
 	public static String SocialSettings = "<SocialSettings><AppearOffline>false</AppearOffline><DeclineGroupInvite>0</DeclineGroupInvite><DeclineIncommingFriendRequests>false</DeclineIncommingFriendRequests><DeclinePrivateInvite>0</DeclinePrivateInvite><HideOfflineFriends>false</HideOfflineFriends><ShowNewsOnSignIn>false</ShowNewsOnSignIn><ShowOnlyPlayersInSameChatChannel>false</ShowOnlyPlayersInSameChatChannel></SocialSettings>";
 	public static String EventsAvailable = "<EventsPacket><Events><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>117</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>214</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>221</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>232</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>265</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>283</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>294</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>351</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>369</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>382</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>2</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>3</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>5</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>6</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>7</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>8</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>9</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>10</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>11</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>12</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>13</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>14</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>16</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>17</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>18</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>19</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>20</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>21</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>22</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>23</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>24</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>25</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>26</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>27</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>28</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>29</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>30</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>31</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>32</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>33</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>34</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>35</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>36</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>37</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>38</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>39</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>41</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>43</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>45</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>47</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>49</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>50</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>51</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>52</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>53</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>54</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>55</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>56</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>57</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>60</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>61</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>71</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>72</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>76</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>77</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>78</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>79</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>80</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>81</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>82</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>83</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>85</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>87</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>95</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>97</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>98</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>104</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>108</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>109</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>116</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>120</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>131</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>133</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>135</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>144</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>145</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>146</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>147</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>148</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>156</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>157</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>158</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>159</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>165</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>166</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>169</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>175</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>183</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>194</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>196</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>198</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>202</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>209</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>218</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>219</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>252</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>277</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>279</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>280</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>287</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>289</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>290</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>292</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>294</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>295</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>296</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>298</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>299</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>301</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>302</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>303</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>305</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>307</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>308</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>309</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>314</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>317</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>350</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>355</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>357</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>360</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>362</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>366</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>367</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>368</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>370</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>374</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>375</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>376</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>377</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>378</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>379</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>383</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>384</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>385</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>386</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>387</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>388</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>389</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>391</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>392</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>393</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>498</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>499</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>500</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>501</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>502</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>503</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>504</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>506</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>507</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>509</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>510</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>511</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>513</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>515</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>516</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>517</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>521</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>524</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>525</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>526</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>527</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>529</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>530</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>531</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>532</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>533</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>534</EventId></EventDefinition><EventDefinition><CarClassHash>607077938</CarClassHash><EventId>535</EventId></EventDefinition></Events></EventsPacket>";
+	public static String Cryptoticket = "<ClientServerCryptoTicket><CryptoTicket>JMT9BMYq3hB3ANc0K5R4UyfI57RYkh76IXYIXw1O01A=</CryptoTicket><SessionKey>FMb88lBCpYFqrEzsigPNVA==</SessionKey><TicketIv>Lhjt9mBUDHeOXcdkbbhwpA==</TicketIv></ClientServerCryptoTicket>";
+	public static String RelayCryptoTicket = "<UdpRelayCryptoTicket><CryptoTicket>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</CryptoTicket><SessionKey>AAAAAAAAAAAAAAAAAAAAAA==</SessionKey><TicketIv>AAAAAAAAAAAAAAAAAAAAAA==</TicketIv></UdpRelayCryptoTicket>";
 
 	public static String HeaderA = "<ArrayOfProductTrans xmlns=\"http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">";
 	public static String HeaderB = "<ArrayOfCategoryTrans xmlns=\"http://schemas.datacontract.org/2004/07/Victory.DataLayer.Serialization\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">";
@@ -177,5 +39,17 @@ public class Constants {
 	public static String CarRepair = HeaderA + "<ProductTrans>" + Bundle + "<Currency>CASH</Currency><Description>Repairs your car</Description><DurationMinute>0</DurationMinute><Hash>2002411042</Hash><Icon/><Level>0</Level><LongDescription>Repairs your car</LongDescription><Price>150.0000</Price><Priority>0</Priority><ProductId>SRV-REPAIR</ProductId><ProductTitle>REPAIR</ProductTitle><ProductType>REPAIR</ProductType><SecondaryIcon/><UseCount>1</UseCount><VisualStyle/><WebIcon/><WebLocation/></ProductTrans></ArrayOfProductTrans>";
 	public static String repairPrice(int amount) {
 		return HeaderA + "<ProductTrans>" + Bundle + "<Currency>CASH</Currency><Description>Repairs your car</Description><DurationMinute>0</DurationMinute><Hash>2002411042</Hash><Icon/><Level>0</Level><LongDescription>Repairs your car</LongDescription><Price>" + amount + "</Price><Priority>0</Priority><ProductId>SRV-REPAIR</ProductId><ProductTitle>REPAIR</ProductTitle><ProductType>REPAIR</ProductType><SecondaryIcon/><UseCount>1</UseCount><VisualStyle/><WebIcon/><WebLocation/></ProductTrans></ArrayOfProductTrans>";
+	}
+	public static String powerupXmpp(String PowerupID){
+		return "<message from='nfsw.engine.engine@127.0.0.1/EA_Chat' id='JN_0' to='nfsw.RELAYPERSONA@127.0.0.1'><body>&lt;response status='1' ticket='0'&gt;&lt;PowerupActivated&gt;&lt;Count&gt;1&lt;/Count&gt;&lt;Id&gt;" + PowerupID + "&lt;/Id&gt;&lt;PersonaId&gt;RELAYPERSONA&lt;/PersonaId&gt;&lt;TargetPersonaId&gt;0&lt;/TargetPersonaId&gt;&lt;/PowerupActivated&gt;&lt;/response&gt;</body><subject>LOLnope.</subject></message>";
+	}
+	public static String acceptInvite(String personaId, String eventId){
+		return "<LobbyInfo><Countdown><EventId>" + eventId + "</EventId><IsWaiting>false</IsWaiting><LobbyCountdownInMilliseconds>15000</LobbyCountdownInMilliseconds><LobbyId>100000</LobbyId><LobbyStuckDurationInMilliseconds>3</LobbyStuckDurationInMilliseconds></Countdown><Entrants><LobbyEntrantInfo><GridIndex>0</GridIndex><Heat>1</Heat><Level>10</Level><PersonaId>" + personaId + "</PersonaId><State>InLobby</State></LobbyEntrantInfo><LobbyEntrantInfo><GridIndex>1</GridIndex><Heat>1</Heat><Level>10</Level><PersonaId>200</PersonaId><State>InLobby</State></LobbyEntrantInfo></Entrants><EventId>" + eventId + "</EventId><IsInviteEnabled>false</IsInviteEnabled><LobbyId>100000</LobbyId><LobbyInviteId>100000</LobbyInviteId></LobbyInfo>";
+	}
+	public static String joinEvent(String personaId, String eventId){
+		return "<message from='nfsw.engine.engine2.victoryworker.2@127.0.0.1/EA_Chat' id='JN_0' to='nfsw." + personaId + "@127.0.0.1'><body>&lt;response status='1' ticket='0'&gt;&lt;LobbyInvite xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\"&gt;&lt;EventId&gt;" + eventId +  "&lt;/EventId&gt;&lt;InviteLifetimeInMilliseconds&gt;10000&lt;/InviteLifetimeInMilliseconds&gt;&lt;InvitedByPersonaId&gt;0&lt;/InvitedByPersonaId&gt;&lt;IsPrivate&gt;false&lt;/IsPrivate&gt;&lt;LobbyInviteId&gt;100000&lt;/LobbyInviteId&gt;&lt;/LobbyInvite&gt;&lt;/response&gt;</body><subject>LOLnope</subject></message>";
+	}
+	public static String acceptEvent(String personaId, String eventId){
+		return "<message from='nfsw.engine.engine7.victoryworker.1@127.0.0.1/EA_Chat' id='JN_0' to='nfsw." + personaId + "@127.0.0.1'><body>&lt;response status='1' ticket='0'&gt;&lt;LobbyLaunched xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\"&gt;&lt;CryptoTickets&gt;&lt;P2PCryptoTicket&gt;&lt;PersonaId&gt;200&lt;/PersonaId&gt;&lt;SessionKey&gt;AAAAAAAAAAAAAAAAAAAAAA==&lt;/SessionKey&gt;&lt;/P2PCryptoTicket&gt;&lt;/CryptoTickets&gt;&lt;Entrants&gt;&lt;LobbyEntrantInfo&gt;&lt;GridIndex&gt;0&lt;/GridIndex&gt;&lt;Heat&gt;1&lt;/Heat&gt;&lt;Level&gt;6&lt;/Level&gt;&lt;PersonaId&gt;" + personaId + "&lt;/PersonaId&gt;&lt;State&gt;Unknown&lt;/State&gt;&lt;/LobbyEntrantInfo&gt;&lt;LobbyEntrantInfo&gt;&lt;GridIndex&gt;1&lt;/GridIndex&gt;&lt;Heat&gt;1&lt;/Heat&gt;&lt;Level&gt;6&lt;/Level&gt;&lt;PersonaId&gt;200&lt;/PersonaId&gt;&lt;State&gt;Unknown&lt;/State&gt;&lt;/LobbyEntrantInfo&gt;&lt;/Entrants&gt;&lt;EventSession&gt;&lt;Challenge&gt;&lt;ChallengeId&gt;0&lt;/ChallengeId&gt;&lt;LeftSize&gt;14&lt;/LeftSize&gt;&lt;Pattern&gt;1&lt;/Pattern&gt;&lt;RightSize&gt;50&lt;/RightSize&gt;&lt;/Challenge&gt;&lt;EventId&gt;" + eventId + "&lt;/EventId&gt;&lt;SessionId&gt;2&lt;/SessionId&gt;&lt;/EventSession&gt;&lt;IsNewRelayServer&gt;true&lt;/IsNewRelayServer&gt;&lt;LobbyId&gt;100000&lt;/LobbyId&gt;&lt;UdpRelayHost&gt;127.0.0.1&lt;/UdpRelayHost&gt;&lt;UdpRelayPort&gt;9998&lt;/UdpRelayPort&gt;&lt;/LobbyLaunched&gt;&lt;/response&gt;</body><subject>LOLnope</subject></message>";
 	}
 }

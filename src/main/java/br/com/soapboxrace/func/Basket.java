@@ -64,12 +64,7 @@ public class Basket {
 						Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml"));
 						int lastIdIndex = doc.getElementsByTagName("Id").getLength() - 1;
 						String carId = "1";
-						if (lastIdIndex <= 0) {
-							lastIdIndex = 0; carId = "1";
-						}
-						else {
-							carId = String.valueOf(Integer.parseInt(doc.getElementsByTagName("Id").item(lastIdIndex).getTextContent()) + 1);
-						}
+						if (lastIdIndex <= 0) {lastIdIndex = 0; carId = "1";} else {carId = String.valueOf(Integer.parseInt(doc.getElementsByTagName("Id").item(lastIdIndex).getTextContent()) + 1);}
 						Document doc2 = docBuilder.parse(new File("www/basket/" + basketId + ".xml"));
 						doc2.getElementsByTagName("Id").item(1).setTextContent(carId);
 						doc2.getElementsByTagName("ResalePrice").item(0).setTextContent(resellPrice);
@@ -117,9 +112,9 @@ public class Basket {
 					String StringOwnedCar = serializer.writeToString(OwnedCar);
 					fx.WriteTempCar(StringOwnedCar);
 					fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
-					Functions.log(" -->: The car [ID = " + serialNumber + "; Index = " + carId + "] has been sold.");
+					Functions.log(" -->: The car has been sold.");
 				} else {
-					Functions.log(" -->: The car [ID = " + serialNumber + "; Index = 0] is the last car, can't be sold.");
+					Functions.log(" -->: The car is the last car, can't be sold.");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

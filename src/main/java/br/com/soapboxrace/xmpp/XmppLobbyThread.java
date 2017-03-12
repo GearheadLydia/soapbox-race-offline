@@ -15,7 +15,7 @@ public class XmppLobbyThread extends Thread {
 	public void run() {
 		sleepFor(15000L);
 		String acceptEvent = Constants.acceptEvent(personaId, eventId);
-		System.out.println(acceptEvent);
+		//System.out.println(acceptEvent);
 		XmppSrv.sendMsg(Long.valueOf(personaId), acceptEvent);
 	}
 

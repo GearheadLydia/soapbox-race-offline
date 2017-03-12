@@ -56,7 +56,7 @@ public class HttpSrv extends GzipHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String sLastTarget = target.split("/")[target.split("/").length - 1];
-			System.out.println(baseRequest);
+			//System.out.println(baseRequest);
 			if (!target.contains("broad") && !target.contains("heart") && !target.contains("powerup") && !target.contains("queue") && !target.contains("catalog") && !target.contains("Gifts") && !target.contains("hunt") && !target.contains("ersona") && !target.contains("event") && !target.contains(".jpg")) {
 				if ("POST".equals(baseRequest.getMethod())) {
 					Functions.log(baseRequest.getMethod() + ": ----------------------------------------------------------------> " + target.replaceAll("/soapbox/Engine.svc/", ""));
@@ -71,52 +71,63 @@ public class HttpSrv extends GzipHandler {
 				Functions.personaId = baseRequest.getParameter("personaId");
 				fx.ChangeDefaultPersona(String.valueOf(Integer.parseInt(baseRequest.getParameter("personaId"))));
 
-			} else if (sLastTarget.equals("repair")){
-				modifiedTarget = "x"; Functions.answerData = "<int>100</int>";
-			} else if (sLastTarget.equals("getrebroadcasters")){
+			} else if (target.contains("getrebroadcasters")){
 				modifiedTarget = "x"; Functions.answerData = Constants.Rebroadcasters;
-			} else if (sLastTarget.equals("heartbeat")){
+			} else if (target.contains("heartbeat")){
 				modifiedTarget = "x"; Functions.answerData = Constants.HeartBeat;
-			} else if (sLastTarget.equals("NewsArticles")){
+			} else if (sLastTarget.equals("cryptoticket")){
+				modifiedTarget = "x"; Functions.answerData = Constants.Cryptoticket;
+			} else if(target.contains("relaycryptoticket")){
+				modifiedTarget = "x"; Functions.answerData = Constants.RelayCryptoTicket;
+			} else if(target.contains("joinqueueevent")){
+				String[] split = target.split("/");
+				eventIdTmp = split[5];
+				XmppSrv.sendMsg(Long.valueOf(Functions.personaId), Constants.joinEvent(Functions.personaId, split[5]));
+			} else if (target.contains("acceptinvite")) {
+				modifiedTarget = "x"; Functions.answerData = Constants.acceptInvite(Functions.personaId, eventIdTmp);
+				new XmppLobbyThread(Functions.personaId, eventIdTmp).start();
+			} else if (target.contains("client")){
+				modifiedTarget = "x"; Functions.answerData = Constants.ClientLog;
+			} else if (target.contains("GetAndTriggerAvailableLevelGifts")){
+				modifiedTarget = "x"; Functions.answerData = "<ArrayOfLevelGiftDefinition/>";
+			} else if (target.contains("fraudConfig")){
+				modifiedTarget = "x"; Functions.answerData = Constants.FraudConfig;
+			} else if (target.contains("getfriendlistfromuserid")){
+				modifiedTarget = "x"; Functions.answerData = Constants.Friendlist;
+			} else if (target.contains("carclasses")){
+				modifiedTarget = "x"; Functions.answerData = Constants.CarClasses;
+			} else if (target.contains("GetChatInfo")){
+				modifiedTarget = "x"; Functions.answerData = Constants.ChatInfo;
+			} else if (target.contains("GetExpLevelPointsMap")){
+				modifiedTarget = "x"; Functions.answerData = Constants.ExpLvlPtsMap;
+			} else if (target.contains("getregioninfo")){
+				modifiedTarget = "x"; Functions.answerData = Constants.RegionInfo;
+			} else if (target.contains("systeminfo")){
+				modifiedTarget = "x"; Functions.answerData = Constants.SystemInfo;
+			} else if (target.contains("LoginAnnouncements")){
+				modifiedTarget = "x"; Functions.answerData = Constants.LoginAnnouncements;
+			} else if (target.contains("loadall")){
+				modifiedTarget = "x"; Functions.answerData = Constants.AchievementA + Constants.AchievementB;
+			} else if ((target.contains("getblockeduserlist")) || (target.contains("getblockersbyusers"))){
+				modifiedTarget = "x"; Functions.answerData = "<ArrayOflong/>";
+			} else if ((target.contains("getusersettings")) || (target.contains("setusersettings"))){
+				modifiedTarget = "x"; Functions.answerData = Constants.UserSettings;
+			} else if ((target.contains("getsocialsettings")) || (target.contains("setsocialsettings"))){
+				modifiedTarget = "x"; Functions.answerData = Constants.SocialSettings;
+			} else if (target.contains("repair")){
+				modifiedTarget = "x"; Functions.answerData = "<int>100</int>";
+			} else if (target.contains("launchevent")){
+				modifiedTarget = "x"; matchmaking.launch(sLastTarget);
+			} else if (target.contains("availableatlevel")) {
+				modifiedTarget = "x"; Functions.answerData = Constants.EventsAvailable;
+			} else if (target.contains("NewsArticles")){
 				modifiedTarget = "x"; Functions.answerData = "<ArrayOfNewsArticleTrans/>";
 				Thread.sleep(500);
 				Functions.sendChat(Constants.WelcomeMessage);
 				iEvent = randEventIds[new Random().nextInt(randEventIds.length)];
 				Functions.sendChat("New Random-Event generated. ID: " + iEvent);
 				Functions.log(" -->: New Random-Event generated / ID: " + iEvent);
-			} else if (sLastTarget.equals("client")){
-				modifiedTarget = "x"; Functions.answerData = Constants.ClientLog;
-			} else if (sLastTarget.equals("GetAndTriggerAvailableLevelGifts")){
-				modifiedTarget = "x"; Functions.answerData = "<ArrayOfLevelGiftDefinition/>";
-			} else if (sLastTarget.equals("fraudConfig")){
-				modifiedTarget = "x"; Functions.answerData = Constants.FraudConfig;
-			} else if (sLastTarget.equals("getfriendlistfromuserid")){
-				modifiedTarget = "x"; Functions.answerData = Constants.Friendlist;
-			} else if (sLastTarget.equals("carclasses")){
-				modifiedTarget = "x"; Functions.answerData = Constants.CarClasses;
-			} else if (sLastTarget.equals("GetChatInfo")){
-				modifiedTarget = "x"; Functions.answerData = Constants.ChatInfo;
-			} else if (sLastTarget.equals("GetExpLevelPointsMap")){
-				modifiedTarget = "x"; Functions.answerData = Constants.ExpLvlPtsMap;
-			} else if (sLastTarget.equals("getregioninfo")){
-				modifiedTarget = "x"; Functions.answerData = Constants.RegionInfo;
-			} else if (sLastTarget.equals("systeminfo")){
-				modifiedTarget = "x"; Functions.answerData = Constants.SystemInfo;
-			} else if (sLastTarget.equals("LoginAnnouncements")){
-				modifiedTarget = "x"; Functions.answerData = Constants.LoginAnnouncements;
-			} else if (sLastTarget.equals("loadall")){
-				modifiedTarget = "x"; Functions.answerData = Constants.AchievementA + Constants.AchievementB;
-			} else if ((sLastTarget.equals("getblockeduserlist")) || (sLastTarget.equals("getblockersbyusers"))){
-				modifiedTarget = "x"; Functions.answerData = "<ArrayOflong/>";
-			} else if ((sLastTarget.equals("getusersettings")) || (sLastTarget.equals("setusersettings"))){
-				modifiedTarget = "x"; Functions.answerData = Constants.UserSettings;
-			} else if ((sLastTarget.equals("getsocialsettings")) || (sLastTarget.equals("setsocialsettings"))){
-				modifiedTarget = "x"; Functions.answerData = Constants.SocialSettings;
-			} else if (target.contains("launchevent")){
-				modifiedTarget = "x"; matchmaking.launch(sLastTarget);
-			} else if (sLastTarget.equals("availableatlevel")) {
-				modifiedTarget = "x"; Functions.answerData = Constants.EventsAvailable;
-			} else if (sLastTarget.equals("joinqueueracenow")) {
+			} else if (target.contains("joinqueueracenow")) {
 				iEvent = randEventIds[new Random().nextInt(randEventIds.length)];
 				Functions.sendChat("New Random-Event generated. ID: " + iEvent);
 				Functions.log(" -->: New Random-Event generated / ID: " + iEvent);
@@ -144,72 +155,60 @@ public class HttpSrv extends GzipHandler {
 					modifiedTarget = "x"; Functions.answerData = Constants.ShopVinylCats;
 				}
 				
-			} else if (target.matches("/soapbox/Engine.svc/DriverPersona/UpdateStatusMessage")) {
+			} else if (target.contains("UpdateStatusMessage")) {
 				fx.setPersonaMotto(readInputStream(request));
-			} else if (target.matches("/soapbox/Engine.svc/powerups/activated(.*)")) {
+			} else if (target.contains("powerups/activated")) {
 				isXmpp = true; event.processPowerup(sLastTarget, -1);
-			} else if (target.matches("/soapbox/Engine.svc/badges/set")) {
+			} else if (target.contains("badges/set")) {
 				fx.ChangeBadges(readInputStream(request));
-			} else if (target.matches("/soapbox/Engine.svc/personas/(.*)/baskets")) {
+			} else if (target.contains("personas/(.*)/baskets")) {
 				modifiedTarget = "baskets"; basket.processBasket(readInputStream(request));
-			} else if (target.matches("/soapbox/Engine.svc/personas/(.*)/commerce")) {
+			} else if (target.contains("personas/(.*)/commerce")) {
 				modifiedTarget = "commerce"; commerce.saveCommerceData(readInputStream(request));
-			} else if (target.matches("/soapbox/Engine.svc/personas/inventory/sell/(.*)")) {
+			} else if (target.contains("personas/inventory/sell/(.*)")) {
 				commerce.sell(sLastTarget, 0);
-			} else if (target.matches("/soapbox/Engine.svc/personas/(.*)/defaultcar/(.*)")) {
+			} else if (target.contains("personas/(.*)/defaultcar/(.*)")) {
 				fx.ChangeCarIndex(target.split("/")[6], false);
-			} else if (target.matches("/soapbox/Engine.svc/personas/(.*)/cars") && baseRequest.getMethod() == "POST") {
+			} else if (target.contains("personas/(.*)/cars") && baseRequest.getMethod() == "POST") {
 				basket.SellCar(baseRequest.getParameter("serialNumber"));
-			} else if (target.matches("/soapbox/Engine.svc/personas/(.*)/carslots")) {
+			} else if (target.contains("personas/(.*)/carslots")) {
 				fx.FixCarslots();
-			} else if (target.matches("/soapbox/Engine.svc/User/GetPermanentSession")) {
+			} else if (target.contains("GetPermanentSession")) {
 				modifiedTarget = "/soapbox/Engine.svc/personas/GetPermanentSession";
-			} else if (target.matches("/soapbox/Engine.svc/DriverPersona/GetPersonaInfo")) {
+			} else if (target.contains("GetPersonaInfo")) {
 				modifiedTarget = "/soapbox/Engine.svc/personas/" + Functions.personaId + "/GetPersonaInfo";
-			} else if (target.matches("/soapbox/Engine.svc/DriverPersona/GetPersonaBaseFromList")) {
+			} else if (target.contains("GetPersonaBaseFromList")) {
 				String readInputStream = readInputStream(request);
 				String pattern = "(.*)<array:long>(.*)</array:long>(.*)";
 				Pattern r = Pattern.compile(pattern);
 				Matcher m = r.matcher(readInputStream);
 				String personaId = Functions.personaId ;
-				if(m.find()){
-					personaId = m.group(2);
-				}
+				if (m.find()) {personaId = m.group(2);}
 				modifiedTarget = "/soapbox/Engine.svc/personas/" + personaId + "/GetPersonaBaseFromList";
-			} else if (target.matches("/soapbox/Engine.svc/events/gettreasurehunteventsession")) {
+			} else if (target.contains("gettreasurehunteventsession")) {
 				modifiedTarget = "/soapbox/Engine.svc/personas/gettreasurehunteventsession";
-			} else if (target.matches("/soapbox/Engine.svc/personas/inventory/objects")) {
+			} else if (target.contains("inventory/objects")) {
 				modifiedTarget = "/soapbox/Engine.svc/personas/" + Functions.personaId + "/objects";
-			} else if (target.matches("/soapbox/Engine.svc/DriverPersona/CreatePersona(.*)")) {
+			} else if (target.contains("CreatePersona")) {
 				modifiedTarget = "CreatePersona"; persona.createPersona(baseRequest.getParameter("name"), baseRequest.getParameter("iconIndex"));
-			} else if (target.matches("/soapbox/Engine.svc/DriverPersona/DeletePersona(.*)")) {
+			} else if (target.contains("DeletePersona")) {
 				modifiedTarget = "DeletePersona"; persona.deletePersona(baseRequest.getParameter("personaId"));
-			} else if (target.matches("/soapbox/Engine.svc/DriverPersona/ReserveName")) {
+			} else if (target.contains("ReserveName")) {
 				modifiedTarget = "ReserveName"; Functions.answerData = "<ArrayOfstring/>";
-			} else if (target.matches("/soapbox/Engine.svc/event/arbitration")) {
+			} else if (target.contains("event/arbitration")) {
 				event.ReadArbitration(readInputStream(request)); fx.processDurability(); modifiedTarget = "Arbitration";
-			} else if (target.matches("/soapbox/Engine.svc/event/bust")) {
+			} else if (target.contains("event/bust")) {
 				event.ReadBust(); fx.processDurability(); modifiedTarget = "Busted";
-			} else if (target.matches("/soapbox/Engine.svc/events/instancedaccolades")) {
+			} else if (target.contains("events/instancedaccolades")) {
 				event.SetPrize(Event.RaceReward); modifiedTarget = "RaceReward";
-			} else if (target.matches("/soapbox/Engine.svc/events/notifycoincollected")) {
+			} else if (target.contains("events/accolades")) {
+				event.ReadArbitration("<TreasureHunt/>"); modifiedTarget = "THCompleted";
+			} else if (target.contains("events/notifycoincollected")) {
 				fx.SaveTHProgress(baseRequest.getParameter("coins"));
 				if (baseRequest.getParameter("coins").equals("1073741823")) {
 					Functions.log(" -->: Detected TH Finished event.");
 					event.ReadArbitration("<TreasureHunt/>"); modifiedTarget = "THCompleted";
 				}
-			} else if (target.matches("/soapbox/Engine.svc/events/accolades")) {
-				event.ReadArbitration("<TreasureHunt/>"); modifiedTarget = "THCompleted";
-			} else if(target.matches("/soapbox/Engine.svc/matchmaking/joinqueueevent/(.*)")){
-				String[] split = target.split("/");
-				eventIdTmp = split[5];
-				XmppSrv.sendMsg(Long.valueOf(Functions.personaId), Constants.joinEvent(Functions.personaId, split[5]));
-			} else if (target.matches("/soapbox/Engine.svc/matchmaking/acceptinvite(.*)")) {
-				modifiedTarget = "x"; Functions.answerData = Constants.acceptInvite(Functions.personaId, eventIdTmp);
-				new XmppLobbyThread(Functions.personaId, eventIdTmp).start();
-			} else if(target.matches("/soapbox/Engine.svc/crypto/relaycryptoticket/(.*)")){
-				modifiedTarget = "x"; Functions.answerData = Constants.relayCriptoTicket();
-				System.out.println(Constants.relayCriptoTicket());
 			}
 
 			if (target.contains(".jpg")) {response.setContentType("image/jpeg");} else {response.setContentType("application/xml;charset=utf-8");}
