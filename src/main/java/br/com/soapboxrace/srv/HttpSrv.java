@@ -161,17 +161,17 @@ public class HttpSrv extends GzipHandler {
 				isXmpp = true; event.processPowerup(sLastTarget, -1);
 			} else if (target.contains("badges/set")) {
 				fx.ChangeBadges(readInputStream(request));
-			} else if (target.contains("personas/(.*)/baskets")) {
+			} else if (target.contains("/baskets")) {
 				modifiedTarget = "baskets"; basket.processBasket(readInputStream(request));
-			} else if (target.contains("personas/(.*)/commerce")) {
+			} else if (target.contains("/commerce")) {
 				modifiedTarget = "commerce"; commerce.saveCommerceData(readInputStream(request));
-			} else if (target.contains("personas/inventory/sell/(.*)")) {
+			} else if (target.contains("inventory/sell")) {
 				commerce.sell(sLastTarget, 0);
-			} else if (target.contains("personas/(.*)/defaultcar/(.*)")) {
+			} else if (target.matches("/soapbox/Engine.svc/personas/(.*)/defaultcar/(.*)")) {
 				fx.ChangeCarIndex(target.split("/")[6], false);
-			} else if (target.contains("personas/(.*)/cars") && baseRequest.getMethod() == "POST") {
+			} else if (target.matches("/soapbox/Engine.svc/personas/(.*)/cars") && baseRequest.getMethod() == "POST") {
 				basket.SellCar(baseRequest.getParameter("serialNumber"));
-			} else if (target.contains("personas/(.*)/carslots")) {
+			} else if (target.contains("/carslots")) {
 				fx.FixCarslots();
 			} else if (target.contains("GetPermanentSession")) {
 				modifiedTarget = "/soapbox/Engine.svc/personas/GetPermanentSession";

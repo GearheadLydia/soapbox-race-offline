@@ -53,19 +53,20 @@ public class Basket {
 					doc.getElementsByTagName("IsStreakBroken").item(0).setTextContent("false");
 					fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/gettreasurehunteventsession.xml");
 				} else {
-					if (Files.exists(Paths.get("www/basket/" + basketId + ".xml"))) {
+					if (Files.exists(Paths.get("www/soapbox/Engine.svc/catalog/baskets/" + basketId + ".xml"))) {
 						Functions.log(" -->: Purchase for car " + basketId + " was successful.");
 						fx.FixCarslots();
 						Document docShop = docBuilder.parse(new File("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_PRESET_RIDES_ALL_Category.xml"));
 						int basketIdVal = Integer.parseInt(basketId.replaceAll("SRV-CAR", ""));
 						int price = Integer.parseInt(docShop.getElementsByTagName("Price").item(basketIdVal).getTextContent());
-						Functions.log(" -->: New Car was bought for " + price + " IGC.");
+						String type = docShop.getElementsByTagName("Currency").item(basketIdVal).getTextContent().equals("CASH") ? " IGC." : " Boost.";
+						Functions.log(" -->: New Car was bought for " + price + type);
 						String resellPrice = String.valueOf(price / 2);
 						Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml"));
 						int lastIdIndex = doc.getElementsByTagName("Id").getLength() - 1;
 						String carId = "1";
 						if (lastIdIndex <= 0) {lastIdIndex = 0; carId = "1";} else {carId = String.valueOf(Integer.parseInt(doc.getElementsByTagName("Id").item(lastIdIndex).getTextContent()) + 1);}
-						Document doc2 = docBuilder.parse(new File("www/basket/" + basketId + ".xml"));
+						Document doc2 = docBuilder.parse(new File("www/soapbox/Engine.svc/catalog/baskets/" + basketId + ".xml"));
 						doc2.getElementsByTagName("Id").item(1).setTextContent(carId);
 						doc2.getElementsByTagName("ResalePrice").item(0).setTextContent(resellPrice);
 						Node carTrans = doc.importNode(doc2.getFirstChild(), true);
@@ -73,7 +74,7 @@ public class Basket {
 						int _carId = Integer.parseInt(carId) - 1;
 						doc.getElementsByTagName("DefaultOwnedCarIndex").item(0).setTextContent(String.valueOf(_carId));
 						fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
-						fx.WriteTempCar(new String(Files.readAllBytes(Paths.get("www/basket/" + basketId + ".xml")), StandardCharsets.UTF_8));
+						fx.WriteTempCar(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/catalog/baskets/" + basketId + ".xml")), StandardCharsets.UTF_8));
 						Functions.log(" -->: The car [ID = " + carId + "; Index = " + _carId + "] has been bought and set.");
 					} else {
 						Functions.log(" -->: Basket not found: " + basketId);
