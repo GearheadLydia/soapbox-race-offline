@@ -286,7 +286,7 @@ public class Event {
 	}
 
 	public void ReadArbitration(String arbitrationData) {
-		Functions.log(arbitrationData);
+		//Functions.log(arbitrationData);
 		try {
 			leveledUp = false;
 			Rewards = "";

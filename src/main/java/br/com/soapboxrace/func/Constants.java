@@ -1,7 +1,7 @@
 package br.com.soapboxrace.func;
 
 public class Constants {
-	public static String WelcomeMessage = "Welcome to Need For Speed™ World Offline.\n"
+	public static String WelcomeMessage = "Welcome to Need For Speed World Offline.\n"
 										+ "Current Server Version is v1.9.3.\n"
 										+ "Servermod by Keule306.\n"
 										+ "Developed by Nilzao / Berkay2578.\n"
