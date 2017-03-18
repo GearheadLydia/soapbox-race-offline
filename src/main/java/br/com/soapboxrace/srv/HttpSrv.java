@@ -158,9 +158,10 @@ public class HttpSrv extends GzipHandler {
 			} else if (target.contains("UpdateStatusMessage")) {
 				fx.setPersonaMotto(readInputStream(request));
 			} else if (target.contains("powerups/activated")) {
-				String time1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-				String time2 = new SimpleDateFormat("HH:mm:ss.SS").format(new Date());
-				isXmpp = true; event.processPowerup(sLastTarget, -1); Functions.sendAchievement(time1 + "T" + time2);
+				isXmpp = true; event.processPowerup(sLastTarget, -1);
+				//String time1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+				//String time2 = new SimpleDateFormat("HH:mm:ss.SS").format(new Date());
+				//Functions.sendAchievement(time1 + "T" + time2);
 			} else if (target.contains("badges/set")) {
 				fx.ChangeBadges(readInputStream(request));
 			} else if (target.contains("/baskets")) {

@@ -102,16 +102,15 @@ public class Event {
 		Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml"));
 		int lastIdIndex = doc.getElementsByTagName("Id").getLength() - 1;
 		String carId = String.valueOf(Integer.parseInt(doc.getElementsByTagName("Id").item(lastIdIndex).getTextContent()) + 1);
-		Document doc2 = docBuilder.parse(new File("www/basket/" + basketId + ".xml"));
+		Document doc2 = docBuilder.parse(new File("www/soapbox/Engine.svc/catalog/baskets/" + basketId + ".xml"));
 		doc2.getElementsByTagName("Id").item(1).setTextContent(carId);
 		Node carTrans = doc.importNode(doc2.getFirstChild(), true);
 		doc.getElementsByTagName("CarsOwnedByPersona").item(0).appendChild(carTrans);
 		int _carId = Integer.parseInt(carId) - 1;
 		doc.getElementsByTagName("DefaultOwnedCarIndex").item(0).setTextContent(String.valueOf(_carId));
 		fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml");
-		fx.WriteTempCar(new String(Files.readAllBytes(Paths.get("www/basket/" + basketId + ".xml")), StandardCharsets.UTF_8));
+		fx.WriteTempCar(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/catalog/baskets/" + basketId + ".xml")), StandardCharsets.UTF_8));
 		Functions.log(" -->: New car has been added to the carslots of persona " + Functions.personaId + ".");
-		Functions.log(" -->: Car Index has been changed to match the new car's ID.");
 	}
 
 	private void randCatalog() {
@@ -146,7 +145,16 @@ public class Event {
 				type = "CASH";
 				return;
 			} else if (dropNum == 0) {catalog = docBuilder.parse(new InputSource(new StringReader(Constants.Powerups)));
-			} else if (dropNum == 1) {catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_SKILLMODPARTS.xml");
+			} else if (dropNum == 1) {
+				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_SKILLMODPARTS.xml");
+				catId = rand.nextInt(catalog.getElementsByTagName("ProductTrans").getLength());
+				title = catalog.getElementsByTagName("ProductTitle").item(catId).getTextContent();
+				hash = catalog.getElementsByTagName("Hash").item(catId).getTextContent();
+				icon = catalog.getElementsByTagName("Icon").item(catId).getTextContent();
+				type = catalog.getElementsByTagName("ProductType").item(catId).getTextContent();
+				rspr = catalog.getElementsByTagName("Price").item(catId).getTextContent();
+				AddInventoryObject(catalog.getElementsByTagName("ProductTrans").item(catId), rspr);
+				return;
 			} else if (dropNum == 2) {catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/" + mapVisual[rand.nextInt(8)]);
 			} else if (dropNum == 3) {
 				catalog = docBuilder.parse("www/soapbox/Engine.svc/catalog/products_NFSW_NA_EP_PERFORMANCEPARTS.xml");
@@ -293,6 +301,7 @@ public class Event {
 			int eventType = (arbitrationData.startsWith("<DragArbitrationPacket") ? 0 : (arbitrationData.startsWith("<TeamEscapeArbitrationPacket") ? 2 : 1));
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse(new InputSource(new StringReader(arbitrationData)));
+			double eventTime = Double.valueOf(doc.getElementsByTagName("AlternateEventDurationInMilliseconds").item(0).getTextContent()) / 1000;
 			if (arbitrationData.startsWith("<TeamEscapeArbitrationPacket") && doc.getElementsByTagName("FinishReason").item(0).getTextContent().equals("266")) {
 				rank = 5;
 				cash = 0;
@@ -305,18 +314,18 @@ public class Event {
 				cash = 1000 * fx.GetLevel();
 				if (fx.GetLevel() == 100) {exp = 0;} else {exp = 250 * fx.GetLevel();}
 				Rewards = "<RewardPart><RepPart>" + String.valueOf(exp) + "</RepPart><RewardCategory>Rank</RewardCategory><RewardType>None</RewardType><TokenPart>" + String.valueOf(cash) + "</TokenPart></RewardPart>";
-				title = "5000 BOOST";
+				title = "2500 BOOST";
 				hash = "3865073706";
 				icon = "128_cash";
 				type = "CASH";
 				saveAccolades();
-				if (type.equals("CASH")) {Economy economy = new Economy("5000", "1", true); economy.transCurrency(false);}
+				if (type.equals("CASH")) {Economy economy = new Economy("2500", "1", true); economy.transCurrency(false);}
 				SetPrize(THReward);
 				return;
 			} else {
 				rank = arbitrationData.startsWith("<Pursuit") ? 2 : Integer.parseInt(doc.getElementsByTagName("Rank").item(0).getTextContent());
 				int baseReward = Functions.rewards[0];
-				cash = (int) Math.round((double) (rank == 1 ? baseReward : (rank == 2 ? ((double) baseReward / 2.0) : (rank == 3 ? ((double) baseReward / 4.0) : ((double) baseReward / 20.0)))) * Functions.multipliers[eventType]);
+				cash = (int) Math.round((double) (rank == 1 ? baseReward : (rank == 2 ? ((double) baseReward / 2.0) : (rank == 3 ? ((double) baseReward / 4.0) : ((double) baseReward / 20.0)))) * Functions.multipliers[eventType] * (eventTime <= 60 ? 1.0 : (eventTime / 60)));
 				if (fx.GetLevel() >= 100) {exp = 0;} else {exp = (int) Math.round((double) (50 * fx.GetLevel()) + ((53 * fx.GetLevel()) * (rank <= 3 ? Math.abs(rank - 5) : 1)) * Functions.multipliers[eventType]);}
 				Rewards = "<RewardPart><RepPart>" + String.valueOf(exp) + "</RepPart><RewardCategory>Rank</RewardCategory><RewardType>None</RewardType><TokenPart>" + String.valueOf(cash) + "</TokenPart></RewardPart>";
 				if (!arbitrationData.startsWith("<Pursuit")) {

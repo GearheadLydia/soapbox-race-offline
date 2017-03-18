@@ -151,13 +151,13 @@ public class Functions {
 			Document docSlot = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new File("www/soapbox/Engine.svc/personas/" + personaId + "/carslots.xml"));
 			int carId = Integer.parseInt(docSlot.getElementsByTagName("DefaultOwnedCarIndex").item(0).getTextContent());
 			int current = Integer.parseInt(docSlot.getElementsByTagName("Durability").item(carId).getTextContent());
-			if (current >= 4) {
-				docSlot.getElementsByTagName("Durability").item(carId).setTextContent(String.valueOf(current - 4));
+			if (current >= 2) {
+				docSlot.getElementsByTagName("Durability").item(carId).setTextContent(String.valueOf(current - 2));
 			} else {
 				docSlot.getElementsByTagName("Durability").item(carId).setTextContent("0");
 			}
 			WriteXML(docSlot, "www/soapbox/Engine.svc/personas/" + personaId + "/carslots.xml");
-			log(" -->: Your Car lost 4% Durability.");
+			log(" -->: Your Car lost 2% Durability.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
