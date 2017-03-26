@@ -80,8 +80,7 @@ public class HttpSrv extends GzipHandler {
 			} else if(target.contains("relaycryptoticket")){
 				modifiedTarget = "x"; Functions.answerData = Constants.RelayCryptoTicket;
 			} else if(target.contains("joinqueueevent")){
-				String[] split = target.split("/");
-				eventIdTmp = split[5];
+				String[] split = target.split("/"); eventIdTmp = split[5];
 				XmppSrv.sendMsg(Long.valueOf(Functions.personaId), Constants.joinEvent(Functions.personaId, split[5]));
 			} else if (target.contains("acceptinvite")) {
 				modifiedTarget = "x"; Functions.answerData = Constants.acceptInvite(Functions.personaId, eventIdTmp);
@@ -119,7 +118,7 @@ public class HttpSrv extends GzipHandler {
 			} else if (target.contains("launchevent")){
 				modifiedTarget = "x"; matchmaking.launch(sLastTarget);
 			} else if (target.contains("availableatlevel")) {
-				modifiedTarget = "x"; Functions.answerData = Constants.EventsAvailable;
+				modifiedTarget = "x"; Functions.answerData = Matchmaking.getLevelEvents();
 			} else if (target.contains("NewsArticles")){
 				modifiedTarget = "x"; Functions.answerData = "<ArrayOfNewsArticleTrans/>";
 				Thread.sleep(500);
@@ -135,8 +134,10 @@ public class HttpSrv extends GzipHandler {
 
 			} else if ((target.contains("productsInCategory")) || (target.contains("categories"))) {
 				modifiedTarget = "/soapbox/Engine.svc/catalog/products_" + baseRequest.getParameter("categoryName");
-				if (modifiedTarget.contains("BoosterPacks") || modifiedTarget.contains("BOOSTERPACKS") || modifiedTarget.contains("VISUALPARTS") || modifiedTarget.contains("CARDPACK") || modifiedTarget.contains("CARS") || modifiedTarget.contains("AMPLIFIERS") || modifiedTarget.contains("STORE_SKILL")){
+				if (modifiedTarget.contains("BoosterPacks") || modifiedTarget.contains("BOOSTERPACKS") || modifiedTarget.contains("VISUALPARTS") || modifiedTarget.contains("CARDPACK") || modifiedTarget.contains("CARS") || modifiedTarget.contains("STORE_SKILL")){
 					modifiedTarget = "x"; Functions.answerData = "<ArrayOfProductTrans/>";
+				} else if (modifiedTarget.contains("AMPLIFIERS")){
+					modifiedTarget = "x"; Functions.answerData = Constants.Amplifiers;
 				} else if (modifiedTarget.contains("CARSLOTS")){
 					modifiedTarget = "x"; Functions.answerData = Constants.CarSlot;
 				} else if (modifiedTarget.contains("PAINTS_BODY")){

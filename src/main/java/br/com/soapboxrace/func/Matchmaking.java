@@ -1,5 +1,11 @@
 package br.com.soapboxrace.func;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import br.com.soapboxrace.srv.HttpSrv;
 
 public class Matchmaking {
@@ -7,6 +13,8 @@ public class Matchmaking {
 	public static String eventA = "<SessionInfo xmlns=\"http://schemas.datacontract.org/2004/07/Victory.Service\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\"><Challenge><ChallengeId>0</ChallengeId><LeftSize>14</LeftSize><Pattern>1</Pattern><RightSize>50</RightSize></Challenge><EventId>";
 	public static String eventB = "</EventId><SessionId>2</SessionId></SessionInfo>";
 	public static String eventC;
+	public static String eventD = "<EventDefinition><CarClassHash>607077938</CarClassHash><EventId>";
+	public static String eventE = "</EventId></EventDefinition>";
 
 	public void launch(String event){
 		int launchid = Integer.parseInt(event);
@@ -358,5 +366,217 @@ public class Matchmaking {
 		else eventC = eventA + "48" + eventB;
 		Functions.answerData = eventC;
 		return;
+	}
+	
+	public static String getLevelEvents() throws ParserConfigurationException, SAXException, IOException{
+		Functions fx = new Functions();
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("<EventsPacket><Events>");
+
+		if (fx.GetLevel() == 1)
+		stringBuilder.append(eventD + "42" + eventE
+							+eventD + "44" + eventE
+							+eventD + "46" + eventE
+							+eventD + "48" + eventE);
+		if (fx.GetLevel() >= 2)
+		stringBuilder.append(eventD + "41" + eventE
+							+eventD + "43" + eventE
+							+eventD + "45" + eventE
+							+eventD + "47" + eventE
+							+eventD + "60" + eventE
+							+eventD + "374" + eventE
+							+eventD + "378" + eventE);
+		if (fx.GetLevel() >= 3)
+		stringBuilder.append(eventD + "2" + eventE
+							+eventD + "72" + eventE
+							+eventD + "299" + eventE
+							+eventD + "19" + eventE
+							+eventD + "289" + eventE
+							+eventD + "158" + eventE
+							+eventD + "533" + eventE
+							+eventD + "35" + eventE
+							+eventD + "526" + eventE
+							+eventD + "535" + eventE
+							+eventD + "357" + eventE);
+		if (fx.GetLevel() >= 5)
+		stringBuilder.append(eventD + "383" + eventE
+							+eventD + "116" + eventE
+							+eventD + "27" + eventE
+							+eventD + "355" + eventE
+							+eventD + "87" + eventE
+							+eventD + "175" + eventE
+							+eventD + "307" + eventE
+							+eventD + "81" + eventE
+							+eventD + "8" + eventE
+							+eventD + "18" + eventE
+							+eventD + "52" + eventE
+							+eventD + "156" + eventE
+							+eventD + "368" + eventE);
+		if (fx.GetLevel() >= 10)
+		stringBuilder.append(eventD + "384" + eventE
+							+eventD + "80" + eventE
+							+eventD + "367" + eventE
+							+eventD + "350" + eventE
+							+eventD + "147" + eventE
+							+eventD + "279" + eventE
+							+eventD + "36" + eventE
+							+eventD + "360" + eventE
+							+eventD + "32" + eventE
+							+eventD + "534" + eventE
+							+eventD + "165" + eventE
+							+eventD + "183" + eventE
+							+eventD + "370" + eventE);
+		if (fx.GetLevel() >= 15)
+		stringBuilder.append(eventD + "385" + eventE
+							+eventD + "290" + eventE
+							+eventD + "97" + eventE
+							+eventD + "33" + eventE
+							+eventD + "10" + eventE
+							+eventD + "166" + eventE
+							+eventD + "20" + eventE
+							+eventD + "22" + eventE
+							+eventD + "83" + eventE
+							+eventD + "38" + eventE
+							+eventD + "194" + eventE
+							+eventD + "202" + eventE
+							+eventD + "375" + eventE);
+		if (fx.GetLevel() >= 20)
+		stringBuilder.append(eventD + "386" + eventE
+							+eventD + "28" + eventE
+							+eventD + "292" + eventE
+							+eventD + "5" + eventE
+							+eventD + "521" + eventE
+							+eventD + "55" + eventE
+							+eventD + "301" + eventE
+							+eventD + "218" + eventE
+							+eventD + "379" + eventE
+							+eventD + "9" + eventE
+							+eventD + "499" + eventE
+							+eventD + "500" + eventE
+							+eventD + "376" + eventE);
+		if (fx.GetLevel() >= 25)
+		stringBuilder.append(eventD + "387" + eventE
+							+eventD + "296" + eventE
+							+eventD + "37" + eventE
+							+eventD + "57" + eventE
+							+eventD + "77" + eventE
+							+eventD + "144" + eventE
+							+eventD + "78" + eventE
+							+eventD + "295" + eventE
+							+eventD + "531" + eventE
+							+eventD + "198" + eventE
+							+eventD + "501" + eventE
+							+eventD + "502" + eventE
+							+eventD + "377" + eventE);
+		if (fx.GetLevel() >= 30)
+		stringBuilder.append(eventD + "388" + eventE
+							+eventD + "61" + eventE
+							+eventD + "169" + eventE
+							+eventD + "23" + eventE
+							+eventD + "108" + eventE
+							+eventD + "29" + eventE
+							+eventD + "287" + eventE
+							+eventD + "148" + eventE
+							+eventD + "317" + eventE
+							+eventD + "13" + eventE
+							+eventD + "503" + eventE
+							+eventD + "504" + eventE
+							+eventD + "391" + eventE);
+		if (fx.GetLevel() >= 35)
+		stringBuilder.append(eventD + "389" + eventE
+							+eventD + "53" + eventE
+							+eventD + "109" + eventE
+							+eventD + "366" + eventE
+							+eventD + "314" + eventE
+							+eventD + "219" + eventE
+							+eventD + "25" + eventE
+							+eventD + "120" + eventE
+							+eventD + "277" + eventE
+							+eventD + "506" + eventE
+							+eventD + "507" + eventE
+							+eventD + "392" + eventE);
+		if (fx.GetLevel() >= 40)
+		stringBuilder.append(eventD + "393" + eventE
+							+eventD + "7" + eventE
+							+eventD + "280" + eventE
+							+eventD + "157" + eventE
+							+eventD + "49" + eventE
+							+eventD + "76" + eventE
+							+eventD + "146" + eventE
+							+eventD + "17" + eventE
+							+eventD + "16" + eventE
+							+eventD + "509" + eventE
+							+eventD + "510" + eventE);
+		if (fx.GetLevel() >= 45)
+		stringBuilder.append(eventD + "498" + eventE
+							+eventD + "303" + eventE
+							+eventD + "362" + eventE
+							+eventD + "71" + eventE
+							+eventD + "11" + eventE
+							+eventD + "196" + eventE
+							+eventD + "50" + eventE
+							+eventD + "39" + eventE
+							+eventD + "31" + eventE
+							+eventD + "511" + eventE
+							+eventD + "513" + eventE);
+		if (fx.GetLevel() >= 50)
+		stringBuilder.append(eventD + "117" + eventE
+							+eventD + "532" + eventE
+							+eventD + "309" + eventE
+							+eventD + "133" + eventE
+							+eventD + "30" + eventE
+							+eventD + "131" + eventE
+							+eventD + "79" + eventE
+							+eventD + "98" + eventE
+							+eventD + "515" + eventE
+							+eventD + "516" + eventE
+							+eventD + "221" + eventE);
+		if (fx.GetLevel() >= 60)
+		stringBuilder.append(eventD + "232" + eventE
+							+eventD + "529" + eventE
+							+eventD + "56" + eventE
+							+eventD + "21" + eventE
+							+eventD + "298" + eventE
+							+eventD + "6" + eventE
+							+eventD + "209" + eventE
+							+eventD + "85" + eventE
+							+eventD + "517" + eventE
+							+eventD + "524" + eventE
+							+eventD + "525" + eventE
+							+eventD + "265" + eventE);
+		if (fx.GetLevel() >= 70)
+		stringBuilder.append(eventD + "283" + eventE
+							+eventD + "3" + eventE
+							+eventD + "527" + eventE
+							+eventD + "26" + eventE
+							+eventD + "54" + eventE
+							+eventD + "104" + eventE
+							+eventD + "14" + eventE
+							+eventD + "305" + eventE
+							+eventD + "294" + eventE);
+		if (fx.GetLevel() >= 80)
+		stringBuilder.append(eventD + "351" + eventE
+							+eventD + "159" + eventE
+							+eventD + "24" + eventE
+							+eventD + "51" + eventE
+							+eventD + "145" + eventE
+							+eventD + "252" + eventE
+							+eventD + "308" + eventE
+							+eventD + "12" + eventE
+							+eventD + "369" + eventE);
+		if (fx.GetLevel() >= 90)
+		stringBuilder.append(eventD + "382" + eventE
+							+eventD + "135" + eventE
+							+eventD + "530" + eventE
+							+eventD + "34" + eventE
+							+eventD + "82" + eventE
+							+eventD + "302" + eventE
+							+eventD + "294" + eventE
+							+eventD + "95" + eventE);
+		if (fx.GetLevel() >= 99)
+		stringBuilder.append(eventD + "214" + eventE);
+
+		stringBuilder.append("</Events></EventsPacket>");
+		return stringBuilder.toString();
 	}
 }

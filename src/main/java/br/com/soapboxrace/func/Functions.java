@@ -126,7 +126,6 @@ public class Functions {
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse("www/soapbox/Engine.svc/personas/GetPermanentSession.xml");
 			int index = CountInstances(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/GetPermanentSession.xml")), StandardCharsets.UTF_8), "<ProfileData>", "<PersonaId>"+ persona +"</PersonaId>") - 1;
-			log(" -->: Setting default Persona Index to " + index + ".");
 			doc.getElementsByTagName("defaultPersonaIdx").item(0).setTextContent(String.valueOf(index));
 			WriteXML(doc, "www/soapbox/Engine.svc/personas/GetPermanentSession.xml");
 		} catch (Exception e) {

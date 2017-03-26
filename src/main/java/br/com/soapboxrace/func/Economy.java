@@ -98,18 +98,20 @@ public class Economy {
 					catalog = docBuilder.parse(catalogName);
 				} else {
 					catID = fx.CountInstances((
-							catalogName == "Powerups" ? Constants.Powerups : 
-							catalogName == "CarSlot" ? Constants.CarSlot : 
-							catalogName == "CarRepair" ? Constants.repairPrice(fx.calcRepair()) : 
-							catalogName == "StreakRecovery" ? Constants.StreakRecovery : 
-							catalogName == "PaintsBody" ? Constants.PaintsBody : 
+							catalogName == "Amplifiers" ? Constants.Amplifiers :
+							catalogName == "Powerups" ? Constants.Powerups :
+							catalogName == "CarSlot" ? Constants.CarSlot :
+							catalogName == "CarRepair" ? Constants.repairPrice(fx.calcRepair()) :
+							catalogName == "StreakRecovery" ? Constants.StreakRecovery :
+							catalogName == "PaintsBody" ? Constants.PaintsBody :
 							catalogName == "PaintsWheel" ? Constants.PaintsWheel : null), "<ProductTrans>", "<ProductId>" + productId + "</ProductId>") - 1;
 					catalog = docBuilder.parse(new InputSource(new StringReader((
-							catalogName == "Powerups" ? Constants.Powerups : 
-							catalogName == "CarSlot" ? Constants.CarSlot : 
-							catalogName == "CarRepair" ? Constants.repairPrice(fx.calcRepair()) : 
-							catalogName == "StreakRecovery" ? Constants.StreakRecovery : 
-							catalogName == "PaintsBody" ? Constants.PaintsBody : 
+							catalogName == "Amplifiers" ? Constants.Amplifiers :
+							catalogName == "Powerups" ? Constants.Powerups :
+							catalogName == "CarSlot" ? Constants.CarSlot :
+							catalogName == "CarRepair" ? Constants.repairPrice(fx.calcRepair()) :
+							catalogName == "StreakRecovery" ? Constants.StreakRecovery :
+							catalogName == "PaintsBody" ? Constants.PaintsBody :
 							catalogName == "PaintsWheel" ? Constants.PaintsWheel : null))));
 				}
 				amount = Double.valueOf(catalog.getElementsByTagName("Price").item(catID).getTextContent()).intValue();
@@ -136,18 +138,20 @@ public class Economy {
 				catalog = docBuilder.parse(catalogName);
 			} else {
 				catID = fx.CountInstances((
-						catalogName == "Powerups" ? Constants.Powerups : 
-						catalogName == "CarSlot" ? Constants.CarSlot : 
-						catalogName == "CarRepair" ? Constants.repairPrice(fx.calcRepair()) : 
-						catalogName == "StreakRecovery" ? Constants.StreakRecovery : 
-						catalogName == "PaintsBody" ? Constants.PaintsBody : 
+						catalogName == "Amplifiers" ? Constants.Amplifiers :
+						catalogName == "Powerups" ? Constants.Powerups :
+						catalogName == "CarSlot" ? Constants.CarSlot :
+						catalogName == "CarRepair" ? Constants.repairPrice(fx.calcRepair()) :
+						catalogName == "StreakRecovery" ? Constants.StreakRecovery :
+						catalogName == "PaintsBody" ? Constants.PaintsBody :
 						catalogName == "PaintsWheel" ? Constants.PaintsWheel : null), "<ProductTrans>", "<ProductId>" + productId + "</ProductId>") - 1;
 				catalog = docBuilder.parse(new InputSource(new StringReader((
-						catalogName == "Powerups" ? Constants.Powerups : 
-						catalogName == "CarSlot" ? Constants.CarSlot : 
-						catalogName == "CarRepair" ? Constants.repairPrice(fx.calcRepair()) : 
-						catalogName == "StreakRecovery" ? Constants.StreakRecovery : 
-						catalogName == "PaintsBody" ? Constants.PaintsBody : 
+						catalogName == "Amplifiers" ? Constants.Amplifiers :
+						catalogName == "Powerups" ? Constants.Powerups :
+						catalogName == "CarSlot" ? Constants.CarSlot :
+						catalogName == "CarRepair" ? Constants.repairPrice(fx.calcRepair()) :
+						catalogName == "StreakRecovery" ? Constants.StreakRecovery :
+						catalogName == "PaintsBody" ? Constants.PaintsBody :
 						catalogName == "PaintsWheel" ? Constants.PaintsWheel : null))));
 			}
 			amount = Double.valueOf(catalog.getElementsByTagName("Price").item(catID).getTextContent()).intValue();

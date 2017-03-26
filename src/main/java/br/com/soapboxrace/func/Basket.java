@@ -37,6 +37,8 @@ public class Basket {
 			if (economy.transCurrency(true)) {
 				if (basketId.contains("SRV-GARAGESLOT")) {
 					fx.AddCarslot();
+				} else if (basketId.contains("SRV-UPDATE")) {
+					Functions.log(" -->: Cash + Speedboost has been updated.");
 				} else if (basketId.contains("SRV-REPAIR")) {
 					Document doc = docBuilder.parse(new File("www/soapbox/Engine.svc/personas/" + Functions.personaId + "/carslots.xml"));
 					doc.getElementsByTagName("Durability").item(Integer.parseInt(fx.ReadCarIndex())).setTextContent("100");
@@ -126,6 +128,8 @@ public class Basket {
 	private String mapBasketId(String basketId) {
 		if (basketId.contains("SRV-POWERUP")) {
 			return "Powerups";
+		} else if (basketId.contains("SRV-UPDATE")) {
+			return "Amplifiers";
 		} else if (basketId.contains("SRV-GARAGESLOT")) {
 			return "CarSlot";
 		} else if (basketId.contains("SRV-REPAIR")) {
