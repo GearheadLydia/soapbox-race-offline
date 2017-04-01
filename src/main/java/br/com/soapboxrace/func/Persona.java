@@ -19,7 +19,7 @@ public class Persona {
 	private Functions fx = new Functions();
 	private static String BadgesA = "<BadgePacket><AchievementRankId>0</AchievementRankId><BadgeDefinitionId>0</BadgeDefinitionId><IsRare>true</IsRare><Rarity>0</Rarity><SlotId>";
 	private static String BadgesB = "<Badges>" + BadgesA + "0</SlotId></BadgePacket>" + BadgesA + "1</SlotId></BadgePacket>" + BadgesA + "2</SlotId></BadgePacket>" + BadgesA + "3</SlotId></BadgePacket></Badges>";
-	private static String InventoryA = "<ProductId>DO NOT USE ME</ProductId><RemainingUseCount>10</RemainingUseCount><ResellPrice>0.00000</ResellPrice><Status>ACTIVE</Status><StringHash>";
+	private static String InventoryA = "<ProductId>DO NOT USE ME</ProductId><RemainingUseCount>25</RemainingUseCount><ResellPrice>0.00000</ResellPrice><Status>ACTIVE</Status><StringHash>";
 	private static String InventoryB = "</StringHash><VirtualItemType>powerup</VirtualItemType></InventoryItemTrans>";
 
 	public void createPersona(String name, String iconindex) {
@@ -27,13 +27,13 @@ public class Persona {
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = docBuilder.parse("www/soapbox/Engine.svc/personas/GetPermanentSession.xml");
 			int personaAm = fx.CountInstances(new String(Files.readAllBytes(Paths.get("www/soapbox/Engine.svc/personas/GetPermanentSession.xml")), StandardCharsets.UTF_8), "<ProfileData>", "</personas>");
-			int personaId = (personaAm == 0 ? 100 : Integer.valueOf(doc.getElementsByTagName("PersonaId").item(personaAm - 1).getTextContent()) + 100 );
+			int personaId = (personaAm == 0 ? 100 : Integer.valueOf(doc.getElementsByTagName("PersonaId").item(personaAm - 1).getTextContent()) + 1);
 			int boostAm = (personaAm == 0 ? 5000 : Integer.valueOf(doc.getElementsByTagName("Boost").item(0).getTextContent()));
 			String sessionId = doc.getElementsByTagName("defaultPersonaIdx").item(0).getTextContent();
 			Functions.personaId = String.valueOf(personaId);
 			Functions.log(" -->: Creating Persona: " + name + " / ID: " + personaId + ") / Avatar: " + iconindex);
 			Node parent = doc.getElementsByTagName("personas").item(0);
-			String child = "<ProfileData>"
+			String pData = "<ProfileData>"
 					+ "<Boost>" + boostAm + "</Boost>"
 					+ "<Cash>200000</Cash>"
 					+ "<IconIndex>" + iconindex + "</IconIndex>"
@@ -47,7 +47,7 @@ public class Persona {
 					+ "<RepAtCurrentLevel>0</RepAtCurrentLevel>"
 					+ "<ccar i:nil=\"true\"/>"
 					+ "</ProfileData>";
-			Node fragmentNode = docBuilder.parse(new InputSource(new StringReader(child))).getDocumentElement();
+			Node fragmentNode = docBuilder.parse(new InputSource(new StringReader(pData))).getDocumentElement();
 			fragmentNode = doc.importNode(fragmentNode, true);
 			parent.appendChild(fragmentNode);
 			if (personaId == 100) {doc.getElementsByTagName("defaultPersonaIdx").item(0).setTextContent("0");} 
@@ -57,15 +57,15 @@ public class Persona {
 			Path pathA = Paths.get("www/soapbox/Engine.svc/personas/" + personaId + "/cars.xml");
 			Files.createDirectories(pathA.getParent()); Files.createFile(pathA);
 			Path pathB = Paths.get("www/soapbox/Engine.svc/personas/" + personaId + "/carslots.xml");
-			Files.createDirectories(pathA.getParent()); Files.createFile(pathB);
+			Files.createDirectories(pathB.getParent()); Files.createFile(pathB);
 			Path pathC = Paths.get("www/soapbox/Engine.svc/personas/" + personaId + "/defaultcar.xml");
-			Files.createDirectories(pathA.getParent()); Files.createFile(pathC);
+			Files.createDirectories(pathC.getParent()); Files.createFile(pathC);
 			Path pathD = Paths.get("www/soapbox/Engine.svc/personas/" + personaId + "/objects.xml");
-			Files.createDirectories(pathA.getParent()); Files.createFile(pathD);
+			Files.createDirectories(pathD.getParent()); Files.createFile(pathD);
 			Path pathE = Paths.get("www/soapbox/Engine.svc/personas/" + personaId + "/GetPersonaBaseFromList.xml");
-			Files.createDirectories(pathA.getParent()); Files.createFile(pathE);
+			Files.createDirectories(pathE.getParent()); Files.createFile(pathE);
 			Path pathF = Paths.get("www/soapbox/Engine.svc/personas/" + personaId + "/GetPersonaInfo.xml");
-			Files.createDirectories(pathA.getParent()); Files.createFile(pathF);
+			Files.createDirectories(pathF.getParent()); Files.createFile(pathF);
 
 	        fx.WriteText("www/soapbox/Engine.svc/personas/" + personaId + "/cars.xml", "<OwnedCarTrans></OwnedCarTrans>");
 	        fx.WriteText("www/soapbox/Engine.svc/personas/" + personaId + "/carslots.xml",
@@ -123,7 +123,7 @@ public class Persona {
 	        		+ "<RepAtCurrentLevel>0</RepAtCurrentLevel>"
 	        		+ "<Score>0</Score>"
 	        		+ "</ProfileData>");
-			Functions.answerData = child;
+			Functions.answerData = pData;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,9 +139,7 @@ public class Persona {
 			doc.getElementsByTagName("personas").item(0).removeChild(persona);
 			doc.getElementsByTagName("defaultPersonaIdx").item(0).setTextContent("0");
 			fx.WriteXML(doc, "www/soapbox/Engine.svc/personas/GetPermanentSession.xml");
-			
 		    File x = new File("www/soapbox/Engine.svc/personas/" + personaId); for (File file : x.listFiles()) {file.delete();} x.delete();
-		    
 			Functions.answerData = "<long>0</long>";
 		} catch (Exception e) {
 			e.printStackTrace();

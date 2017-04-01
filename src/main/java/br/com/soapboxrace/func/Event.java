@@ -322,10 +322,10 @@ public class Event {
 				SetPrize(THReward);
 				return;
 			} else {
-				double eventTime = Double.valueOf(doc.getElementsByTagName("AlternateEventDurationInMilliseconds").item(0).getTextContent()) / 2000;
+				double eventTime = Double.valueOf(doc.getElementsByTagName("AlternateEventDurationInMilliseconds").item(0).getTextContent()) / 1000;
 				rank = arbitrationData.startsWith("<Pursuit") ? 2 : Integer.parseInt(doc.getElementsByTagName("Rank").item(0).getTextContent());
 				int baseReward = Functions.rewards[0];
-				cash = (int) Math.round((double) (rank == 1 ? baseReward : (rank == 2 ? ((double) baseReward / 2.0) : (rank == 3 ? ((double) baseReward / 4.0) : ((double) baseReward / 20.0)))) * Functions.multipliers[eventType] * (eventTime <= 60 ? 1.0 : eventTime >= 300 ? 5.0 : (eventTime / 60)));
+				cash = (int) Math.round((double) (rank == 1 ? baseReward : (rank == 2 ? ((double) baseReward / 2.0) : (rank == 3 ? ((double) baseReward / 4.0) : ((double) baseReward / 20.0)))) * Functions.multipliers[eventType] + (eventTime <= 60 ? 1000 : eventTime >= 300 ? 5000 : ((eventTime / 60) * 1000)));
 				if (fx.GetLevel() >= 100) {exp = 0;} else {exp = (int) Math.round((double) (50 * fx.GetLevel()) + ((53 * fx.GetLevel()) * (rank <= 3 ? Math.abs(rank - 5) : 1)) * Functions.multipliers[eventType]);}
 				Rewards = "<RewardPart><RepPart>" + String.valueOf(exp) + "</RepPart><RewardCategory>Rank</RewardCategory><RewardType>None</RewardType><TokenPart>" + String.valueOf(cash) + "</TokenPart></RewardPart>";
 				if (!arbitrationData.startsWith("<Pursuit")) {
